@@ -60,39 +60,16 @@ public class Foe extends MovingSprite {
 	}
 	
 	/**
-	 * Randomly changes the direction to move.
-	 */
-	public void randomizeDirection() {
-		switch (ranGen.nextInt(4)) {
-			case (0): moveUp(); break;
-			case (1): moveDown(); break;
-			case (2): moveLeft(); break;
-			case (3): moveRight(); break;
-		}
-	}
-	
-	/**
 	 * Moves the foe, if possible. Occasionally randomly change direction if no longer can move towards a direction
 	 * or if delegate says it should.
 	 */
 	public void act() {
-		if (direction == null || (ranGen.nextDouble() <= 0.5 && delegate.shouldChangeDirection(this))) {
-			randomizeDirection();
-		}
-		
-		Point newPoint = new Point(loc.x + distanceToMove.x, loc.y + distanceToMove.y);
-		Point autoCorrectedPoint = delegate.autoCorrectedPoint(newPoint, this);
-		if (autoCorrectedPoint.x != loc.x || autoCorrectedPoint.y != loc.y) {
-			stepCount++;
-		} else if (delegate.shouldChangeDirection(this)) {
-			randomizeDirection();
-		}
-		loc = autoCorrectedPoint;
-		
-		Iterator<Successor> successors = delegate.getSuccessors(this);
-		while (successors.hasNext()) {
-			Successor successor = successors.next();
-			System.out.println(successor.getDirection()+" goes to "+successor.getPoint());
+		if (delegate.shouldChangeDirection(this)) {
+			Iterator<Successor> successors = delegate.getSuccessors(this);
+			while (successors.hasNext()) {
+				Successor successor = successors.next();
+				System.out.println(successor.getDirection()+" goes to "+successor.getPoint());
+			}
 		}
 	}
 }
