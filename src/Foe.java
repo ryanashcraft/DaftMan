@@ -27,6 +27,7 @@ public class Foe extends MovingSprite {
 	final static double STEP_SPEED_MULTIPLIER = 0.1;
 
 	private HeuristicDelegate heuristicDelegate;
+	private Random rand;
 	
 	/**
 	 * Constructor for Foe objects. Chains to MovingSprite's constructor.
@@ -41,6 +42,8 @@ public class Foe extends MovingSprite {
 		moveDistance = 1;
 		
 		this.heuristicDelegate = heuristicDelegate;
+		
+		rand = new Random();
 	}
 	
 	/**
@@ -68,8 +71,14 @@ public class Foe extends MovingSprite {
 	 * or if delegate says it should.
 	 */
 	public void act() {
-		if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
-			move(aStarSearch());
+		boolean runSearch = delegate.distanceFromBro(loc) < 5;
+		
+		if (runSearch) {
+			if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
+				move(aStarSearch());
+			}
+		} else if (delegate.shouldChangeDirection(this)) {
+			move(SpriteDirection.values()[rand.nextInt(SpriteDirection.values().length)]);
 		}
 		
 		super.act();

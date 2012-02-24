@@ -221,4 +221,5 @@ interface MovingSpriteDelegate {
 	 * @return The tile the point is in
 	 */
 	public Tile tileForPoint(Point aPoint);
+	public int distanceFromBro(Point point);
 }

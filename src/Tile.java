@@ -3,7 +3,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 public abstract class Tile {
-	protected final Dimension size = new Dimension(32, 32);
+	protected final static Dimension size = new Dimension(32, 32);
 	protected int row;
 	protected int col;
 	

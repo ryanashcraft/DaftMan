@@ -1028,6 +1028,10 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	public int heuristicForTile(Tile t) {
 		return 0;
 	}
+	
+	public int distanceFromBro(Point point) {
+		return (int) Math.ceil((Math.abs(point.x - bro.loc.x) / Tile.size.width + Math.abs(point.y - bro.loc.y)) / Tile.size.height);
+	}
 
 	public boolean isGoalState(State currentState) {
 		if (currentState == null) {
