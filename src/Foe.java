@@ -69,7 +69,10 @@ public class Foe extends MovingSprite {
 			while (successors.hasNext()) {
 				Successor successor = successors.next();
 				System.out.println(successor.getDirection()+" goes to "+successor.getPoint());
+				move(successor.getDirection());
 			}
 		}
+		
+		super.act();
 	}
 }
