@@ -66,6 +66,11 @@ public abstract class MovingSprite extends Sprite {
 		direction = SpriteDirection.RIGHT;
 	}
 	
+	public void stopMoving() {
+		distanceToMove = new Point(0, 0);
+		direction = SpriteDirection.STOP;
+	}
+	
 	/**
 	 * Set moving direction to SpriteDirection parameter.
 	 * @parameter direction Direction to move
@@ -79,6 +84,8 @@ public abstract class MovingSprite extends Sprite {
 			moveRight();
 		} else if (direction == SpriteDirection.LEFT) {
 			moveLeft();
+		} else if (direction == SpriteDirection.STOP) {
+			stopMoving();
 		}
 	}
 	
@@ -202,8 +209,16 @@ interface MovingSpriteDelegate {
 	/**
 	 * Returns the successors of a foe at a point.
 	 * 
+	 * @param State
 	 * @param aSprite The moving sprite
 	 * @return Array of points and the directions to get there.
 	 */
-	public Iterator<Successor> getSuccessors(MovingSprite sprite);
+	public Iterator<State> getSuccessors(State state, MovingSprite sprite);
+	/**
+	 * Gets the tile that contains a point.
+	 * 
+	 * @param aPoint The point
+	 * @return The tile the point is in
+	 */
+	public Tile tileForPoint(Point aPoint);
 }

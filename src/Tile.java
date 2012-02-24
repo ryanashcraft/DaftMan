@@ -65,4 +65,13 @@ public abstract class Tile {
 	public boolean isDestructible() {
 		return false;
 	}
+	
+	public boolean equals(Object o) {
+		if (o != null && o instanceof Tile) {
+			Tile other = (Tile)o;
+			return other.getCenter().equals(getCenter());
+		}
+		
+		return false;
+	}
 }

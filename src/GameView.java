@@ -36,7 +36,7 @@ import javax.swing.Timer;
  * @version 1.0 12/03/2010
  */
 
-public class GameView extends JPanel implements KeyListener, MouseListener, ActionListener, MovingSpriteDelegate, BombDelegate, FireDelegate {
+public class GameView extends JPanel implements KeyListener, MouseListener, ActionListener, MovingSpriteDelegate, BombDelegate, FireDelegate, HeuristicDelegate {
 	private GameViewDelegate delegate;
 	private Bro bro;
 	private ArrayList<Foe> foes = new ArrayList<Foe>();
@@ -171,11 +171,11 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		bro = new Bro(this);
 		bro.setLoc(tiles[1][1].getLoc());
 		
-		final int BASE_NUMBER_OF_FOES = 1;//5;
+		final int BASE_NUMBER_OF_FOES = 2;
 		final int ADD_NUMBER_OF_FOES_PER_LEVEL = 2;
 		int foesToAdd = BASE_NUMBER_OF_FOES + (level-1)*ADD_NUMBER_OF_FOES_PER_LEVEL;
 		for (int i = 0; i < foesToAdd; i++) {
-			Foe aFoe = new Foe(this);
+			Foe aFoe = new Foe(this, this);
 			Tile aTile = null;
 
 			// if can't find suitable place for foe, don't run into an infinite loop
@@ -208,7 +208,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 				}
 				
 				else if (stringArray[r-1].charAt(c-1) == '2') {
-					Foe aFoe = new Foe(this);
+					Foe aFoe = new Foe(this, this);
 					aFoe.setLoc(tiles[r][c].getLoc());
 					foes.add(aFoe);
 				}
@@ -550,19 +550,23 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	/**
 	 * Returns the successors of a foe at a point.
 	 * 
+	 * @param State
 	 * @param aSprite The moving sprite
 	 * @return Array of points and the directions to get there.
 	 */
-	public Iterator<Successor> getSuccessors(MovingSprite sprite) {
-		ArrayList<Successor> successors = new ArrayList<Successor>();
-		Point loc = sprite.loc;
+	public Iterator<State> getSuccessors(State state, MovingSprite sprite) {
+		ArrayList<State> successors = new ArrayList<State>();
+		Tile t = state.getTile();
+		Point loc = t.getLoc();
 		
 		for (int i = 0; i < SpriteDirection.values().length; i++) {
 			sprite.move(SpriteDirection.values()[i]);
 			
-			Point newPoint = new Point(loc.x + sprite.distanceToMove.x, loc.y + sprite.distanceToMove.y);
+			Point newPoint = new Point(loc.x + sprite.distanceToMove.x * sprite.getSize().width, loc.y + sprite.distanceToMove.y * sprite.getSize().height);
 			if (canMoveToPoint(newPoint, sprite)) {
-				successors.add(new Successor(newPoint, SpriteDirection.values()[i]));
+				if (tileForPoint(newPoint) != null) {
+					successors.add(new State(tileForPoint(newPoint), SpriteDirection.values()[i], 1));
+				}
 			}
 		}
 		return successors.iterator();
@@ -1019,6 +1023,17 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		} else if (aSprite.getClass() == Star.class) {
 			stars.add((Star) aSprite);
 		}
+	}
+
+	public int heuristicForTile(Tile t) {
+		return 0;
+	}
+
+	public boolean isGoalState(State currentState) {
+		if (currentState == null) {
+			System.err.println("FOO!");
+		}
+		return currentState.getTile().equals(tileForPoint(bro.getCenter()));
 	}
 }
 

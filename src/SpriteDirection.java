@@ -5,5 +5,6 @@ public enum SpriteDirection {
 	UP,
 	DOWN,
 	LEFT,
-	RIGHT
+	RIGHT,
+	STOP
 };

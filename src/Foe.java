@@ -1,7 +1,9 @@
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 
@@ -24,19 +26,21 @@ public class Foe extends MovingSprite {
 	public static Image[] leftImages;
 	final static double STEP_SPEED_MULTIPLIER = 0.1;
 
-	private Random ranGen = new Random();
+	private HeuristicDelegate heuristicDelegate;
 	
 	/**
 	 * Constructor for Foe objects. Chains to MovingSprite's constructor.
 	 * 
 	 * @param aDelegate The MovingSpriteDelegate object
 	 */
-	public Foe(MovingSpriteDelegate aDelegate) {
+	public Foe(MovingSpriteDelegate aDelegate, HeuristicDelegate heuristicDelegate) {
 		super(aDelegate);
 		
 		health = 1;
 		immunity = 0;
 		moveDistance = 1;
+		
+		this.heuristicDelegate = heuristicDelegate;
 	}
 	
 	/**
@@ -64,15 +68,48 @@ public class Foe extends MovingSprite {
 	 * or if delegate says it should.
 	 */
 	public void act() {
-		if (delegate.shouldChangeDirection(this)) {
-			Iterator<Successor> successors = delegate.getSuccessors(this);
-			while (successors.hasNext()) {
-				Successor successor = successors.next();
-				System.out.println(successor.getDirection()+" goes to "+successor.getPoint());
-				move(successor.getDirection());
-			}
+		if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
+			move(aStarSearch());
 		}
 		
 		super.act();
+	}
+	
+	public SpriteDirection aStarSearch() {
+		ArrayList<Tile> visited = new ArrayList<Tile>();
+		ArrayList<Path> results = new ArrayList<Path>();
+		
+		visited.clear();
+		
+		PriorityQueue<Path> priorityQueue = new PriorityQueue<Path>(1, new AStarComparator(heuristicDelegate));
+		
+		priorityQueue.add(new Path(new State(delegate.tileForPoint(getCenter()))));
+		
+		System.out.println("Searching...");
+		
+		while (!priorityQueue.isEmpty()) {
+			Path currentPath = priorityQueue.remove();
+			State currentState = currentPath.getLastState();
+									
+			if (!visited.contains(currentState.getTile()) && currentState != null) {
+				visited.add(currentState.getTile());
+				results.add(currentPath);
+				
+				if (heuristicDelegate.isGoalState(currentState)) {
+					System.out.println("Found solution");
+					if (currentPath.getPathway().size() > 1) {
+						return currentPath.getPathway().get(1).getDirection();
+					}
+				}
+				
+				Iterator<State> successors = delegate.getSuccessors(currentState, this);
+				while (successors.hasNext()) {
+					State successor = successors.next();
+					priorityQueue.add(new Path(currentPath, successor));
+				}
+			}
+		}
+		
+		return SpriteDirection.STOP;
 	}
 }
