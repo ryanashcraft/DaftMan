@@ -205,5 +205,5 @@ interface MovingSpriteDelegate {
 	 * @param aSprite The moving sprite
 	 * @return Array of points and the directions to get there.
 	 */
-	public Iterator getSuccessors(MovingSprite sprite);
+	public Iterator<Successor> getSuccessors(MovingSprite sprite);
 }
