@@ -560,8 +560,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		for (int i = 0; i < SpriteDirection.values().length; i++) {
 			sprite.move(SpriteDirection.values()[i]);
 			
-			Point distanceToMove = sprite.getDistanceToMove();
-			Point newPoint = new Point(loc.x + distanceToMove.x, loc.y + distanceToMove.y);
+			Point newPoint = new Point(loc.x + sprite.size.width, loc.y + sprite.size.height);
 			if (canMoveToPoint(newPoint, sprite)) {
 				successors.add(new Successor(newPoint, SpriteDirection.values()[i]));
 			}
