@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.util.Iterator;
 
 
 /**
@@ -23,16 +24,6 @@ public abstract class MovingSprite extends Sprite {
 	protected int immunity;
 	
 	/**
-	 * Moving directions.
-	 */
-	public enum SpriteDirection {
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT
-	};
-	
-	/**
 	 * Constructor for MovingSprite objects
 	 * 
 	 * @param aDelegate
@@ -49,8 +40,6 @@ public abstract class MovingSprite extends Sprite {
 	public void moveUp() {
 		distanceToMove = new Point(0, -moveDistance);
 		direction = SpriteDirection.UP;
-		
-		act();
 	}
 	
 	/**
@@ -59,8 +48,6 @@ public abstract class MovingSprite extends Sprite {
 	public void moveDown() {
 		distanceToMove = new Point(0, moveDistance);
 		direction = SpriteDirection.DOWN;
-
-		act();
 	}
 	
 	/**
@@ -69,8 +56,6 @@ public abstract class MovingSprite extends Sprite {
 	public void moveLeft() {
 		distanceToMove = new Point(-moveDistance, 0);
 		direction = SpriteDirection.LEFT;
-
-		act();
 	}
 	
 	/**
@@ -79,8 +64,22 @@ public abstract class MovingSprite extends Sprite {
 	public void moveRight() {
 		distanceToMove = new Point(moveDistance, 0);
 		direction = SpriteDirection.RIGHT;
-
-		act();
+	}
+	
+	/**
+	 * Set moving direction to SpriteDirection parameter.
+	 * @parameter direction Direction to move
+	 */
+	public void move(SpriteDirection direction) {
+		if (direction == SpriteDirection.DOWN) {
+			moveDown();
+		} else if (direction == SpriteDirection.UP) {
+			moveUp();
+		} else if (direction == SpriteDirection.RIGHT) {
+			moveRight();
+		} else if (direction == SpriteDirection.LEFT) {
+			moveLeft();
+		}
 	}
 	
 	/**
@@ -158,6 +157,15 @@ public abstract class MovingSprite extends Sprite {
 	public int getImmunity() {
 		return immunity;
 	}
+	
+	/**
+	 * Gets the distance to move.
+	 * 
+	 * @return Distance to move
+	 */
+	public Point getDistanceToMove() {
+		return distanceToMove;
+	}
 }
 
 /**
@@ -191,4 +199,11 @@ interface MovingSpriteDelegate {
 	 * @return Whether a foe should change direction
 	 */
 	public boolean shouldChangeDirection(Foe aFoe);
+	/**
+	 * Returns the successors of a foe at a point.
+	 * 
+	 * @param aSprite The moving sprite
+	 * @return Array of points and the directions to get there.
+	 */
+	public Iterator getSuccessors(MovingSprite sprite);
 }

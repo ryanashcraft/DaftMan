@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.util.Iterator;
 import java.util.Random;
 
 
@@ -87,5 +88,11 @@ public class Foe extends MovingSprite {
 			randomizeDirection();
 		}
 		loc = autoCorrectedPoint;
+		
+		Iterator<Successor> successors = delegate.getSuccessors(this);
+		while (successors.hasNext()) {
+			Successor successor = successors.next();
+			System.out.println(successor.getDirection()+" goes to "+successor.getPoint());
+		}
 	}
 }

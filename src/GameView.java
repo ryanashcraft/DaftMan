@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
@@ -544,6 +545,28 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * Returns the successors of a foe at a point.
+	 * 
+	 * @param aSprite The moving sprite
+	 * @return Array of points and the directions to get there.
+	 */
+	public Iterator getSuccessors(MovingSprite sprite) {
+		ArrayList<Successor> successors = new ArrayList<Successor>();
+		Point loc = sprite.loc;
+		
+		for (int i = 0; i < SpriteDirection.values().length; i++) {
+			sprite.move(SpriteDirection.values()[i]);
+			
+			Point distanceToMove = sprite.getDistanceToMove();
+			Point newPoint = new Point(loc.x + distanceToMove.x, loc.y + distanceToMove.y);
+			if (canMoveToPoint(newPoint, sprite)) {
+				successors.add(new Successor(newPoint, SpriteDirection.values()[i]));
+			}
+		}
+		return successors.iterator();
 	}
 
 	/**
