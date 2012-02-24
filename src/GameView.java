@@ -171,7 +171,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		bro = new Bro(this);
 		bro.setLoc(tiles[1][1].getLoc());
 		
-		final int BASE_NUMBER_OF_FOES = 5;
+		final int BASE_NUMBER_OF_FOES = 1;//5;
 		final int ADD_NUMBER_OF_FOES_PER_LEVEL = 2;
 		int foesToAdd = BASE_NUMBER_OF_FOES + (level-1)*ADD_NUMBER_OF_FOES_PER_LEVEL;
 		for (int i = 0; i < foesToAdd; i++) {
