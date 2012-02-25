@@ -1,16 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -18,8 +11,6 @@ import java.util.Random;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 
 
 /**
@@ -40,6 +31,10 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	private final int DEFAULT_SCORE = 0;
 	private final int DEFAULT_LEVEL = 1;
 	private final int DEFAULT_HEALTH = 3;
+	private final int HURT_PUNISHMENT_SCORE_VALUE = 0;
+	private final int HURT_FOE_PUNISHMENT_SCORE_VALUE = 5;
+	private final int TIME_TO_WIN = 120;
+	private final int LAST_STEPS = 20;
 
 	private Bro bro;
 	private ArrayList<Foe> foes = new ArrayList<Foe>();
@@ -59,10 +54,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	
 	private ArrayList<Clip> soundEffects = new ArrayList<Clip>();
 	
-	private final int HURT_PUNISHMENT_SCORE_VALUE = 0;
-	private final int HURT_FOE_PUNISHMENT_SCORE_VALUE = 5;
-	private final int TIME_TO_WIN = 120;
-	private final int LAST_STEPS = 20;
 	private int timeLeft;
 	private int lastStepsLeft;
 	private boolean gameOver;
@@ -970,33 +961,4 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	public void setScore(int totalScore) {
 		this.score = totalScore;
 	}
-}
-
-/**
- * GameViewDelegate
- * Required methods for classes that implement this interface.
- * 
- * @author Ryan Ashcraft
- */
-interface GameViewDelegate {
-	/**
-	 * Starts the MIDI sequencer.
-	 */
-	public void startSequencer();
-	/**
-	 * Mutes the MIDI sequencer.
-	 * 
-	 * @param toMute Whether to mute the MIDI sequencer
-	 */
-	public void mute(boolean toMute);
-	/**
-	 * Shows the end screen to display information about the level just played.
-	 * 
-	 * @param won Whether the user won or lost
-	 * @param score Score of previous game
-	 * @param timeLeft The time left form the last level played
-	 * @param health Health remaining from previous game
-	 * @param lastLevelPlayed Numerical value of level of last level played
-	 */
-	public void showEndScreen(boolean won, int score, int timeLeft, int health, int lastLevelPlayed);
 }
