@@ -3,9 +3,10 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 public abstract class Tile {
-	protected final static Dimension size = new Dimension(32, 32);
-	protected int row;
-	protected int col;
+	static final Dimension size = new Dimension(32, 32);
+	
+	private int row;
+	private int col;
 	
 	/**
 	 * Constructor for tile objects. Decreases the row and column by
@@ -64,6 +65,14 @@ public abstract class Tile {
 	 */
 	public boolean isDestructible() {
 		return false;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public int getCol() {
+		return col;
 	}
 	
 	public boolean equals(Object o) {

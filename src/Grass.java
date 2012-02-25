@@ -56,6 +56,6 @@ public class Grass extends Tile {
 	 */
 	public void draw(Graphics g) {
 		g.setColor(bg);
-		g.fillRect(col * size.width, row * size.height, size.width, size.height);
+		g.fillRect(getCol() * size.width, getRow() * size.height, size.width, size.height);
 	}
 }

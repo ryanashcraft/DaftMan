@@ -162,7 +162,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			// if can't find suitable place for foe, don't run into an infinite loop
 			final int MAX_ATTEMPTS = 50;
 			int attempts = 0;
-			while((attempts <= MAX_ATTEMPTS) && (aTile == null || aTile.isImpassable() || !adjacentTileMoveExists(aTile) || (aTile.row < 5 && aTile.col < 5))) {
+			while((attempts <= MAX_ATTEMPTS) && (aTile == null || aTile.isImpassable() || !adjacentTileMoveExists(aTile) || (aTile.getRow() < 5 && aTile.getCol() < 5))) {
 				aTile = tiles[ranGen.nextInt(tiles.length-1)][ranGen.nextInt(tiles[tiles.length-1].length-1)];
 				attempts++;
 			}
@@ -524,8 +524,8 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	 * @return Whether an adjacent tile is passable
 	 */
 	public boolean adjacentTileMoveExists(Tile aTile) {
-		int tileRow = aTile.row+1;
-		int tileCol = aTile.col+1;
+		int tileRow = aTile.getRow() + 1;
+		int tileCol = aTile.getCol() + 1;
 		
 		// now check to make sure there is an alternative direction
 		for (int r = Math.max(0, tileRow-1); r <= Math.min(tiles.length-1, tileRow+1); r++) {
@@ -631,97 +631,97 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		Tile tile = tileForPoint(bomb.getCenter()); 
 				
 		// up
-		for (int r = tile.row+1; r >= 0 && r >= tile.row+1 - MAX_BOMB_DISTANCE + 1; r--) {
-			if (tiles[r][tile.col+1].isDestructible()) {
-				if (tiles[r][tile.col+1].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[r][tile.col+1];
+		for (int r = tile.getRow() + 1; r >= 0 && r >= tile.getRow() + 1 - MAX_BOMB_DISTANCE + 1; r--) {
+			if (tiles[r][tile.getCol() + 1].isDestructible()) {
+				if (tiles[r][tile.getCol() + 1].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[r][tile.getCol() + 1];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[r][tile.col+1] = new Grass(r, tile.col+1);
+				tiles[r][tile.getCol() + 1] = new Grass(r, tile.getCol() + 1);
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.col+1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
 				fires.add(aCloud);
 				
 				break;
-			} else if (tiles[r][tile.col+1].isImpassable()) {
+			} else if (tiles[r][tile.getCol() + 1].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.col+1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
 				fires.add(aCloud);
 			}
 		}
 		
 		// down
-		for (int r = tile.row+1; r < tiles.length && r < tile.row+1 + MAX_BOMB_DISTANCE; r++) {
-			if (tiles[r][tile.col+1].isDestructible()) {
-				if (tiles[r][tile.col+1].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[r][tile.col+1];
+		for (int r = tile.getRow() + 1; r < tiles.length && r < tile.getRow() + 1 + MAX_BOMB_DISTANCE; r++) {
+			if (tiles[r][tile.getCol() + 1].isDestructible()) {
+				if (tiles[r][tile.getCol() + 1].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[r][tile.getCol() + 1];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[r][tile.col+1] = new Grass(r, tile.col+1);
+				tiles[r][tile.getCol() + 1] = new Grass(r, tile.getCol() + 1);
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.col+1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
 				fires.add(aCloud);
 				
 				break;
-			} else if (tiles[r][tile.col+1].isImpassable()) {
+			} else if (tiles[r][tile.getCol() + 1].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.col+1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
 				fires.add(aCloud);
 			}
 		}
 		
 		// left
-		for (int c = tile.col+1; c >= 0 && c >= tile.col+1 - MAX_BOMB_DISTANCE + 1; c--) {
-			if (tiles[tile.row+1][c].isDestructible()) {
-				if (tiles[tile.row+1][c].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[tile.row+1][c];
+		for (int c = tile.getCol() + 1; c >= 0 && c >= tile.getCol() + 1 - MAX_BOMB_DISTANCE + 1; c--) {
+			if (tiles[tile.getRow() + 1][c].isDestructible()) {
+				if (tiles[tile.getRow() + 1][c].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[tile.getRow() + 1][c];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[tile.row+1][c] = new Grass(tile.row+1, c);
+				tiles[tile.getRow() + 1][c] = new Grass(tile.getRow() + 1, c);
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.row+1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
 				fires.add(aCloud);
 				
 				break;
-			} else if (tiles[tile.row+1][c].isImpassable()) {
+			} else if (tiles[tile.getRow() + 1][c].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.row+1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
 				fires.add(aCloud);
 			}
 		}
 		
 		// right
-		for (int c = tile.col+1; c < tiles[tile.row+1].length && c < tile.col+1 + MAX_BOMB_DISTANCE; c++) {
-			if (tiles[tile.row+1][c].isDestructible()) {
-				if (tiles[tile.row+1][c].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[tile.row+1][c];
+		for (int c = tile.getCol() + 1; c < tiles[tile.getRow() + 1].length && c < tile.getCol() + 1 + MAX_BOMB_DISTANCE; c++) {
+			if (tiles[tile.getRow() + 1][c].isDestructible()) {
+				if (tiles[tile.getRow() + 1][c].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[tile.getRow() + 1][c];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[tile.row+1][c] = new Grass(tile.row+1, c);
+				tiles[tile.getRow() + 1][c] = new Grass(tile.getRow() + 1, c);
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.row+1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
 				fires.add(aCloud);
 
 				break;
-			} else if (tiles[tile.row+1][c].isImpassable()) {
+			} else if (tiles[tile.getRow() + 1][c].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.row+1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
 				fires.add(aCloud);
 			}
 		}

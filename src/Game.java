@@ -1,12 +1,6 @@
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.sql.*;
-import java.util.Scanner;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -14,9 +8,6 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.swing.JApplet;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.Timer;
 
 /**
  * HW10: DAFTMAN
@@ -69,9 +60,8 @@ public class Game extends JApplet {
 		prepareResources();
 		
 		SceneDirector.getInstance().pushScene(new MainMenu(SceneDirector.getInstance().getContainer()));
-//		showMainMenu();
 		
-		this.add(SceneDirector.getInstance());
+		add(SceneDirector.getInstance());
 	}
 	
 	/**

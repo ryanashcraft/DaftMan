@@ -41,7 +41,7 @@ public class Brick extends Wall {
 	 * @param g The Graphics object
 	 */
 	public void draw(Graphics g) {
-		g.drawImage(brickImage, col * size.width, row * size.height, getSize().width, getSize().height, null);
+		g.drawImage(brickImage, getCol() * size.width, getRow() * size.height, getSize().width, getSize().height, null);
 	}
 	
 	/**

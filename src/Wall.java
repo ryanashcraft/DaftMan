@@ -37,7 +37,7 @@ public class Wall extends Tile {
 	 * @param g The Graphics object
 	 */
 	public void draw(Graphics g) {
-		g.drawImage(wallImage, col * size.width, row * size.height, getSize().width, getSize().height, null);
+		g.drawImage(wallImage, getCol() * size.width, getRow() * size.height, getSize().width, getSize().height, null);
 	}
 	
 	/**
