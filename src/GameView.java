@@ -484,8 +484,11 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 						}
 					}
 					
-					if (bomb != null && tileForPoint(bomb.getCenter()) == tile) {
-						cost = Integer.MAX_VALUE;
+					if (bomb != null) {
+						double distanceToBomb = euclidieanDistance(bomb.getCenter(), newPoint);
+						if (distanceToBomb <= MAX_BOMB_DISTANCE * Tile.size.getHeight()) {
+							cost = Integer.MAX_VALUE;
+						}
 					}
 					
 					successors.add(new State(tile, SpriteDirection.values()[i], cost));
@@ -493,6 +496,10 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			}
 		}
 		return successors.iterator();
+	}
+	
+	public static double euclidieanDistance(Point a, Point b) {
+		return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 	}
 
 	/**
