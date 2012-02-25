@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -15,7 +17,7 @@ import java.awt.Image;
  */
 
 public class Brick extends Wall {
-	public static Image brickImage;
+	private static Image brickImage;
 	
 	private Sprite prize;
 
@@ -29,6 +31,7 @@ public class Brick extends Wall {
 	public Brick(int aRow, int aCol, Sprite aPrize) {
 		super(aRow, aCol);
 		
+		brickImage = ImageStore.get().getImage("BRICK");
 		prize = aPrize;
 	}
 

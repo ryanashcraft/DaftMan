@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -20,12 +22,6 @@ import java.util.Random;
  */
 
 public class Foe extends MovingSprite {
-	public static Image[] upImages;
-	public static Image[] downImages;
-	public static Image[] rightImages;
-	public static Image[] leftImages;
-
-	private Image[] imageArr;
 	final static double STEP_SPEED_MULTIPLIER = 0.1;
 
 	private HeuristicDelegate heuristicDelegate;
@@ -54,14 +50,15 @@ public class Foe extends MovingSprite {
 	 * @param g The Graphics object
 	 */
 	public void draw(Graphics g) {
+		Image[] imageArr;
 		if (direction == SpriteDirection.UP) {
-			imageArr = upImages;
+			imageArr = ImageStore.get().getAnimation("FOE_UP");
 		} else if (direction == SpriteDirection.DOWN) {
-			imageArr = downImages;
+			imageArr = ImageStore.get().getAnimation("FOE_DOWN");
 		} else if (direction == SpriteDirection.LEFT) {
-			imageArr = leftImages;
-		} else if (direction == SpriteDirection.RIGHT) {
-			imageArr = rightImages;
+			imageArr = ImageStore.get().getAnimation("FOE_LEFT");
+		} else {
+			imageArr = ImageStore.get().getAnimation("FOE_RIGHT");
 		}
 		
 		if (imageArr != null) {

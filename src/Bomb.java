@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -15,7 +17,7 @@ import java.awt.Image;
  */
 
 public class Bomb extends Sprite {
-	public static Image[] bombImages;
+	private static Image[] bombImages;
 	
 	protected BombDelegate delegate;
 	final double STEP_SPEED_MULTIPLIER = 0.05;
@@ -27,6 +29,8 @@ public class Bomb extends Sprite {
 	 */
 	public Bomb(BombDelegate aDelegate) {
 		delegate = aDelegate;
+		
+		bombImages = ImageStore.get().getAnimation("BOMB");
 	}
 	
 	/**

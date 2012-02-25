@@ -1,8 +1,5 @@
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -20,7 +17,6 @@ import javax.swing.JApplet;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-
 
 /**
  * HW10: DAFTMAN
@@ -57,27 +53,7 @@ import javax.swing.Timer;
 
 public class Game extends JApplet {
 	private static Sequencer sequencer;
-	
-	private static Image wallImage;
-	private static Image brickImage;
-	
-	private static Image[] broUpImages;
-	private static Image[] broDownImages;
-	private static Image[] broLeftImages;
-	private static Image[] broRightImages;
-	private static Image[] foeUpImages;
-	private static Image[] foeDownImages;
-	private static Image[] foeLeftImages;
-	private static Image[] foeRightImages;
-	
-	private static Image[] bombImages;
-	private static Image[] fireImages;
-	private static Image yellowRupeeImage;
-	private static Image blueRupeeImage;
-	private static Image heartImage;
-	public static Image smallHeartImage;
-	public static Image starImage;
-	
+		
 	public static Font h1;
 	public static Font h2;
 	public static Font font;
@@ -119,117 +95,7 @@ public class Game extends JApplet {
 	 * Reads all images, sounds, and fonts used in program. Also calls to retrieve
 	 * high score list.
 	 */
-	public void prepareResources() {
-		// use a media tracker to make sure all images are fully loaded
-		MediaTracker mt = new MediaTracker(this);
-		int imagesCount = 0;
-			
-		wallImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/wall.png"));
-		mt.addImage(wallImage, imagesCount++);
-	
-		brickImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/brick.png"));
-		mt.addImage(brickImage, imagesCount++);
-		
-		broUpImages = new Image[3];
-		for (int i = 0; i < broUpImages.length; i++) {
-			broUpImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-up-" + (i+1) + ".png"));
-			mt.addImage(broUpImages[i], imagesCount++);
-		}
-		
-		broDownImages = new Image[3];
-		for (int i = 0; i < broDownImages.length; i++) {
-			broDownImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-down-" + (i+1)  + ".png"));
-			mt.addImage(broDownImages[i], imagesCount++);
-		}
-		
-		broLeftImages = new Image[3];
-		for (int i = 0; i < broLeftImages.length; i++) {
-			broLeftImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-left-" + (i+1)  + ".png"));
-			mt.addImage(broLeftImages[i], imagesCount++);
-		}
-		
-		broRightImages = new Image[3];
-		for (int i = 0; i < broRightImages.length; i++) {
-			broRightImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-right-" + (i+1) + ".png"));
-			mt.addImage(broRightImages[i], imagesCount++);
-		}
-		
-		foeUpImages = new Image[3];
-		for (int i = 0; i < foeUpImages.length; i++) {
-			foeUpImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-up-" + (i+1) + ".png"));
-			mt.addImage(foeUpImages[i], imagesCount++);
-		}
-		
-		foeDownImages = new Image[3];
-		for (int i = 0; i < foeDownImages.length; i++) {
-			foeDownImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-down-" + (i+1)  + ".png"));
-			mt.addImage(foeDownImages[i], imagesCount++);
-		}
-		
-		foeLeftImages = new Image[3];
-		for (int i = 0; i < foeLeftImages.length; i++) {
-			foeLeftImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-left-" + (i+1)  + ".png"));
-			mt.addImage(foeLeftImages[i], imagesCount++);
-		}
-		
-		foeRightImages = new Image[3];
-		for (int i = 0; i < foeRightImages.length; i++) {
-			foeRightImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-right-" + (i+1) + ".png"));
-			mt.addImage(foeRightImages[i], imagesCount++);
-		}
-		
-		bombImages = new Image[2];
-		for (int i = 0; i < bombImages.length; i++) {
-			bombImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bomb-" + (i+1) + ".png"));
-			mt.addImage(bombImages[i], imagesCount++);
-		}
-		
-		fireImages = new Image[2];
-		for (int i = 0; i < fireImages.length; i++) {
-			fireImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/fire-" + (i+1) + ".png"));
-			mt.addImage(fireImages[i], imagesCount++);
-		}
-		
-		yellowRupeeImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/rupee-yellow.png"));
-		mt.addImage(yellowRupeeImage, imagesCount++);
-		
-		blueRupeeImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/rupee-blue.png"));
-		mt.addImage(blueRupeeImage, imagesCount++);
-		
-		heartImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/heart.png"));
-		mt.addImage(heartImage, imagesCount++);
-		
-		smallHeartImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/heart-small.png"));
-		mt.addImage(smallHeartImage, imagesCount++);
-		
-		starImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/star.png"));
-		mt.addImage(starImage, imagesCount++);
-		
-		try {
-        	mt.waitForAll();
-        } catch (InterruptedException e) {
-            return;
-        }
-        
-        Wall.wallImage = wallImage;
-        Brick.brickImage = brickImage;
-        
-        Bro.upImages = broUpImages;
-        Bro.downImages = broDownImages;
-        Bro.rightImages = broRightImages;
-        Bro.leftImages = broLeftImages;
-        Foe.upImages = foeUpImages;
-        Foe.downImages = foeDownImages;
-        Foe.rightImages = foeRightImages;
-        Foe.leftImages = foeLeftImages;
-        
-        Bomb.bombImages = bombImages;
-        Fire.fireImages = fireImages;
-        Rupee.yellowRupeeImage = yellowRupeeImage;
-        Rupee.blueRupeeImage = blueRupeeImage;
-        Heart.heartImage = heartImage;
-        Star.starImage = starImage;
-        
+	public void prepareResources() {        
         font = null;
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("fonts/ARCADECLASSIC.TTF"));

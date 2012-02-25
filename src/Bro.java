@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -15,10 +17,6 @@ import java.awt.Image;
  */
 
 public class Bro extends MovingSprite {
-	public static Image[] upImages;
-	public static Image[] downImages;
-	public static Image[] rightImages;
-	public static Image[] leftImages;
 	final static double STEP_SPEED_MULTIPLIER = 0.1;
 	
 	private int boostSpeedStarStepCount;
@@ -45,13 +43,13 @@ public class Bro extends MovingSprite {
 	public void draw(Graphics g) {
 		Image[] imageArr;
 		if (direction == SpriteDirection.UP) {
-			imageArr = upImages;
+			imageArr = ImageStore.get().getAnimation("BRO_UP");
 		} else if (direction == SpriteDirection.DOWN) {
-			imageArr = downImages;
+			imageArr = ImageStore.get().getAnimation("BRO_DOWN");
 		} else if (direction == SpriteDirection.LEFT) {
-			imageArr = leftImages;
+			imageArr = ImageStore.get().getAnimation("BRO_LEFT");
 		} else {
-			imageArr = rightImages;
+			imageArr = ImageStore.get().getAnimation("BRO_RIGHT");
 		}
 		
 		if (immunity == 0) {

@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -15,7 +17,7 @@ import java.awt.Image;
  */
 
 public class Heart extends Sprite {
-	public static Image heartImage;
+	private static Image heartImage;
 	
 	private int value;
 	
@@ -24,6 +26,8 @@ public class Heart extends Sprite {
 	 */
 	public Heart() {
 		value = 1;
+		
+		heartImage = ImageStore.get().getImage("HEART");
 	}
 	
 	/**

@@ -3,7 +3,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
+
+import core.ImageStore;
 
 
 /**
@@ -18,7 +21,9 @@ import java.awt.Point;
  * @version 1.0 12/03/2010
  */
 
-public class ScoreBoard {	
+public class ScoreBoard {
+	private Image smallHeartImage;
+	
 	private Point loc;
 	private Dimension size;
 	
@@ -37,6 +42,8 @@ public class ScoreBoard {
 	public ScoreBoard(Point aLoc, Dimension aSize) {
 		loc = aLoc;
 		size = aSize;
+		
+		smallHeartImage = ImageStore.get().getImage("SMALL_HEART");
 	}
 	
 	/**
@@ -61,10 +68,10 @@ public class ScoreBoard {
 		g.drawString(scoreString, loc.x + OUTER_MARGIN, loc.y + OUTER_MARGIN*2);
 								
 		for (int i = 0; i < health; i++) {
-			g.drawImage(Game.smallHeartImage, loc.x + OUTER_MARGIN + (Game.smallHeartImage.getWidth(null)+1)*i,
-					loc.y + size.height - OUTER_MARGIN - Game.smallHeartImage.getHeight(null),
-					Game.smallHeartImage.getWidth(null),
-					Game.smallHeartImage.getHeight(null),
+			g.drawImage(smallHeartImage, loc.x + OUTER_MARGIN + (smallHeartImage.getWidth(null)+1)*i,
+					loc.y + size.height - OUTER_MARGIN - smallHeartImage.getHeight(null),
+					smallHeartImage.getWidth(null),
+					smallHeartImage.getHeight(null),
 					null);
 		}
 		
