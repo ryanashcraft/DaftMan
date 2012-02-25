@@ -222,4 +222,5 @@ interface MovingSpriteDelegate {
 	 */
 	public Tile tileForPoint(Point aPoint);
 	public int distanceFromBro(Point point);
+	public boolean canSeeBro(MovingSprite sprite);
 }

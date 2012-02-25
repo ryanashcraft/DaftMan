@@ -71,13 +71,13 @@ public class Foe extends MovingSprite {
 	 * or if delegate says it should.
 	 */
 	public void act() {
-		boolean runSearch = delegate.distanceFromBro(loc) < 5;
+		boolean runSearch = delegate.canSeeBro(this);
 		
 		if (runSearch) {
 			if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
 				move(aStarSearch());
 			}
-		} else if (delegate.shouldChangeDirection(this)) {
+		} else if (delegate.shouldChangeDirection(this) && Math.random() * 10 < 1) {
 			move(SpriteDirection.values()[rand.nextInt(SpriteDirection.values().length)]);
 		}
 		

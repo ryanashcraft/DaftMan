@@ -171,7 +171,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		bro = new Bro(this);
 		bro.setLoc(tiles[1][1].getLoc());
 		
-		final int BASE_NUMBER_OF_FOES = 2;
+		final int BASE_NUMBER_OF_FOES = 4;
 		final int ADD_NUMBER_OF_FOES_PER_LEVEL = 2;
 		int foesToAdd = BASE_NUMBER_OF_FOES + (level-1)*ADD_NUMBER_OF_FOES_PER_LEVEL;
 		for (int i = 0; i < foesToAdd; i++) {
@@ -1031,6 +1031,19 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	
 	public int distanceFromBro(Point point) {
 		return (int) Math.ceil((Math.abs(point.x - bro.loc.x) / Tile.size.width + Math.abs(point.y - bro.loc.y)) / Tile.size.height);
+	}
+
+	public boolean canSeeBro(MovingSprite sprite) {
+		// make a line from the sprite to the tile and if at any point on the line the block intersecting is impassable, return false
+		for (int x = Math.min(sprite.getCenter().x, bro.getCenter().x); x < Math.max(sprite.getCenter().x, bro.getCenter().x); x++) {
+			for (int y = Math.min(sprite.getCenter().y, bro.getCenter().y); y < Math.max(sprite.getCenter().y, bro.getCenter().y); y++) {
+				if (tileForPoint(new Point(x, y)).isImpassable()) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	public boolean isGoalState(State currentState) {
