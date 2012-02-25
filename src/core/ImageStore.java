@@ -54,6 +54,9 @@ public class ImageStore {
 		addImage("images/heart-small.png", "SMALL_HEART");
 		
 		addAnimation("images/bro-up-%d.png", "BRO_UP", 3);
+		addAnimation("images/bro-down-%d.png", "BRO_DOWN", 3);
+		addAnimation("images/bro-left-%d.png", "BRO_LEFT", 3);
+		addAnimation("images/bro-right-%d.png", "BRO_RIGHT", 3);
 	}
 	
 	/**

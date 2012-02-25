@@ -160,30 +160,6 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 		MediaTracker mt = new MediaTracker(this);
 		int imagesCount = 0;
 		
-		broUpImages = new Image[3];
-		for (int i = 0; i < broUpImages.length; i++) {
-			broUpImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-up-" + (i+1) + ".png"));
-			mt.addImage(broUpImages[i], imagesCount++);
-		}
-		
-		broDownImages = new Image[3];
-		for (int i = 0; i < broDownImages.length; i++) {
-			broDownImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-down-" + (i+1)  + ".png"));
-			mt.addImage(broDownImages[i], imagesCount++);
-		}
-		
-		broLeftImages = new Image[3];
-		for (int i = 0; i < broLeftImages.length; i++) {
-			broLeftImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-left-" + (i+1)  + ".png"));
-			mt.addImage(broLeftImages[i], imagesCount++);
-		}
-		
-		broRightImages = new Image[3];
-		for (int i = 0; i < broRightImages.length; i++) {
-			broRightImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bro-right-" + (i+1) + ".png"));
-			mt.addImage(broRightImages[i], imagesCount++);
-		}
-		
 		foeUpImages = new Image[3];
 		for (int i = 0; i < foeUpImages.length; i++) {
 			foeUpImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-up-" + (i+1) + ".png"));
@@ -226,10 +202,6 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
             return;
         }
         
-        Bro.upImages = broUpImages;
-        Bro.downImages = broDownImages;
-        Bro.rightImages = broRightImages;
-        Bro.leftImages = broLeftImages;
         Foe.upImages = foeUpImages;
         Foe.downImages = foeDownImages;
         Foe.rightImages = foeRightImages;
