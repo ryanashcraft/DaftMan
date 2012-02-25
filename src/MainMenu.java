@@ -13,7 +13,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.sound.midi.Sequencer;
 import javax.swing.*;
+
+import core.SoundStore;
 
 
 /**
@@ -119,6 +122,9 @@ public class MainMenu extends Scene {
 			case KeyEvent.VK_H:
 				SceneDirector.getInstance().pushScene(new HighScoreView(SceneDirector.getInstance().getContainer()));
 				break;
+			case KeyEvent.VK_M:
+				SoundStore.get().mute();
+				break;
 		}
 	}
 
@@ -130,8 +136,8 @@ public class MainMenu extends Scene {
 	public void update() {
 		super.update();
 		
-		if (getCycleCount() <= 0) {
-//			delegate.startSequencer();
+		if (getCycleCount() <= 1) {
+			SoundStore.get().playSound("AROUND_THE_WORLD", Sequencer.LOOP_CONTINUOUSLY, 120.0f, false);
 		}
 		
 		setLogoColor(getCycleCount());

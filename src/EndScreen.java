@@ -9,10 +9,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.sound.midi.Sequencer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.Timer;
+
+import core.SoundStore;
 
 
 /**
@@ -159,11 +162,15 @@ public class EndScreen extends Scene {
 	                SpringLayout.SOUTH, recordDirectionsLabel);
 		}
 		
-//		delegate.startSequencer();
+		SoundStore.get().startSequencer();
 	}
 	
 	public void update() {
 		super.update();
+		
+		if (getCycleCount() <= 1) {
+			SoundStore.get().playSound("STRONGER", 0, 120.0f, false);
+		}
 		
 		if (won && getCycleCount() % SceneDirector.getInstance().secondsToCycles(10) == 0) {
 			SceneDirector.getInstance().popScene();
@@ -207,4 +214,58 @@ public class EndScreen extends Scene {
 		
 		nameLabel.setText(Game.addExtraSpaces(name));
 	}
+
+	
+	/**
+	 * Required, but unused KeyListener methods. See API for more information.
+	 * @param e The KeyEvent object
+	 */
+	public void keyReleased(KeyEvent e) { }
+	public void keyTyped(KeyEvent e) { }
+	
+	/**
+	 * Called when user presses a mouse button. Requests focus in window.
+	 * 
+	 * @param e The MouseEvent object
+	 */
+	public void mousePressed(MouseEvent e) {
+		this.requestFocusInWindow();
+	}
+	
+	/**
+	 * Required, but unused MouseListener methods. See API for more information.
+	 * @param e The MouseEvent object
+	 */
+	public void mouseClicked(MouseEvent e) { }
+	public void mouseEntered(MouseEvent e) { }
+	public void mouseExited(MouseEvent e) { }
+	public void mouseReleased(MouseEvent e) {}
+}
+
+/**
+ * EndScreenDelegate
+ * Required methods for classes that implement this interface.
+ * 
+ * @author Ryan Ashcraft
+ */
+interface EndScreenDelegate {
+	/**
+	 * Shows the main menu.
+	 */
+	public void showMainMenu();
+	/**
+	 * Records the score.
+	 * 
+	 * @param totalScore The score value
+	 * @param text The name of the scorer
+	 */
+	public void recordScore(int totalScore, String name);
+	/**
+	 * Called when the level is over to start a new level.
+	 * 
+	 * @param score The score
+	 * @param level The level just played
+	 * @param health The health
+	 */
+	public void newLevel(int score, int level, int health);
 }

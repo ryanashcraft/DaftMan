@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.sound.midi.Sequencer;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+
+import core.SoundStore;
 
 
 /**
@@ -51,9 +54,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	private Tile[][] tiles;
 	private ScoreBoard scoreBoard;
 	private final int SCOREBOARD_HEIGHT = 80;
-	
-	private ArrayList<Clip> soundEffects = new ArrayList<Clip>();
-	
+
 	private int timeLeft;
 	private int lastStepsLeft;
 	private boolean gameOver;
@@ -279,6 +280,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			case KeyEvent.VK_RIGHT: bro.moveRight(); break;
 			case KeyEvent.VK_SPACE: placeBomb(); break;
 			case KeyEvent.VK_C: cheat(); break;
+			case KeyEvent.VK_M: SoundStore.get().mute(); break;
 		}
 	}
 
@@ -305,8 +307,8 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	public void update() {
 		super.update();
 		
-		if (getCycleCount() <= 0) {
-//			delegate.startSequencer();
+		if (getCycleCount() <= 1) {
+			SoundStore.get().playSound("DA_FUNK", Sequencer.LOOP_CONTINUOUSLY, 120.0f, false);
 		}
 		
 		if (bro != null) {
@@ -426,7 +428,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		return count + rupees.size();
 	}
 	
-	/**
+	/*
 	 * Returns whether a MovingSprite can move to a point without intersecting a wall
 	 * 
 	 * @param aPoint The point
@@ -611,7 +613,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		if (bomb == null) {
 			bomb = new Bomb(this);
 			bomb.setLoc(tileForPoint(bro.getCenter()).getLoc());
-			playSound("fuse.wav");
+			SoundStore.get().playSound("FUSE");
 		}
 	}
 
@@ -621,7 +623,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	 * sound effect.
 	 */
 	public void didExplode() {
-		playSound("explode.wav");
+		SoundStore.get().playSound("EXPLODE");
 		
 		Tile tile = tileForPoint(bomb.getCenter()); 
 				
@@ -725,23 +727,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	}
 
 	/**
-	 * Plays a WAV sound.
-	 * 
-	 * @param filename The file name of the WAV sound
-	 */
-	public void playSound(final String filename) {
-        try {
-			Clip sfx = AudioSystem.getClip();
-			soundEffects.add(sfx);
-			AudioInputStream inputStream = AudioSystem.getAudioInputStream(this.getClass().getResourceAsStream("sounds/" + filename));
-			sfx.open(inputStream);
-			sfx.start(); 
-        } catch (Exception e) {
-        	System.err.println(e.getMessage());
-        }
-	}
-
-	/**
 	 * Removes the fire.
 	 * 
 	 * @param aFire The fire
@@ -823,7 +808,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		sprite.hurt();
 		
 		if (sprite == bro) {
-			playSound("hurt.wav");
+			SoundStore.get().playSound("HURT");
 			addToScore(HURT_PUNISHMENT_SCORE_VALUE);
 		}
 		
@@ -846,7 +831,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		addToScore(aRupee.getValue());
 		rupees.remove(aRupee);
 		
-		playSound("rupee-colected.wav");
+		SoundStore.get().playSound("RUPEE_COLLECTED");
 	}
 
 	/**
@@ -859,7 +844,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		addToHealth(aHeart.getValue());
 		hearts.remove(aHeart);
 
-		playSound("heart.wav");
+		SoundStore.get().playSound("HEART");
 	}
 	
 	/**
@@ -873,7 +858,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			bro.boostSpeed();
 			stars.remove(aStar);
 			
-			playSound("speed-up.wav");
+			SoundStore.get().playSound("SPEED_UP");
 		}
 	}
 	
