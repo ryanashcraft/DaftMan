@@ -474,8 +474,21 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			
 			Point newPoint = new Point(loc.x + sprite.distanceToMove.x * sprite.getSize().width, loc.y + sprite.distanceToMove.y * sprite.getSize().height);
 			if (canMoveToPoint(newPoint, sprite)) {
-				if (tileForPoint(newPoint) != null) {
-					successors.add(new State(tileForPoint(newPoint), SpriteDirection.values()[i], 1));
+				Tile tile = tileForPoint(newPoint);
+				if (tile != null) {
+					int cost = 1;
+					
+					for (Fire fire : fires) {
+						if (tileForPoint(fire.getCenter()) == tile) {
+							cost = Integer.MAX_VALUE;
+						}
+					}
+					
+					if (bomb != null && tileForPoint(bomb.getCenter()) == tile) {
+						cost = Integer.MAX_VALUE;
+					}
+					
+					successors.add(new State(tile, SpriteDirection.values()[i], cost));
 				}
 			}
 		}
