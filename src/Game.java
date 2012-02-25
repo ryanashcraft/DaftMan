@@ -160,12 +160,6 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 		MediaTracker mt = new MediaTracker(this);
 		int imagesCount = 0;
 		
-		bombImages = new Image[2];
-		for (int i = 0; i < bombImages.length; i++) {
-			bombImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bomb-" + (i+1) + ".png"));
-			mt.addImage(bombImages[i], imagesCount++);
-		}
-		
 		fireImages = new Image[2];
 		for (int i = 0; i < fireImages.length; i++) {
 			fireImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/fire-" + (i+1) + ".png"));
@@ -178,7 +172,6 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
             return;
         }
         
-        Bomb.bombImages = bombImages;
         Fire.fireImages = fireImages;
 
         smallHeartImage = ImageStore.get().getImage("SMALL_HEART");

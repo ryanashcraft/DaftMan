@@ -62,6 +62,8 @@ public class ImageStore {
 		addAnimation("images/foe-down-%d.png", "FOE_DOWN", 3);
 		addAnimation("images/foe-left-%d.png", "FOE_LEFT", 3);
 		addAnimation("images/foe-right-%d.png", "FOE_RIGHT", 3);
+		
+		addAnimation("images/bomb-%d.png", "BOMB", 2);
 	}
 	
 	/**
