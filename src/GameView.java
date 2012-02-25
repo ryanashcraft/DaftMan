@@ -353,9 +353,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
-//					delegate.showEndScreen(true, score, timeLeft, bro.getHealth(), level);
 					SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, true));
-//					SceneDirector.getInstance().popScene();
 
 					return;
 				} else {
@@ -373,9 +371,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
 					SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, false));
-
-//					delegate.showEndScreen(false, score, 0, bro.getHealth(), level);
-//					SceneDirector.getInstance().popScene();
 
 					return;
 				} else {
