@@ -51,7 +51,7 @@ public class Bomb extends Sprite {
 	public void act() {
 		stepCount++;
 		
-		if (GameView.secondsToSteps(3) == stepCount) {
+		if (SceneDirector.getInstance().secondsToCycles(3) == stepCount) {
 			explode();
 		}
 	}

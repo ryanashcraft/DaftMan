@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -27,8 +28,7 @@ import javax.swing.Timer;
  * @version 1.0 12/03/2010
  */
 
-public class EndScreen extends JPanel implements ActionListener, KeyListener, MouseListener {
-	private EndScreenDelegate delegate;
+public class EndScreen extends Scene {
 	private JLabel wonLabel;
 	private JLabel scoreLabel;
 	private JLabel bonusLabel;
@@ -36,13 +36,8 @@ public class EndScreen extends JPanel implements ActionListener, KeyListener, Mo
 	private JLabel recordDirectionsLabel;
 	private JLabel nameLabel;
 	
-	private Timer timer;
-	private final int TIME_SHOWN = 10000;
-	
 	private boolean won;
 	private int totalScore;
-	private int lastLevelPlayed;
-	private int health;
 	
 	private String name;
 	private final int MAX_NAME_LENGTH = 20;
@@ -58,26 +53,22 @@ public class EndScreen extends JPanel implements ActionListener, KeyListener, Mo
 	 * @param levelPlayed The level of the last level played
 	 * @param aDelegate The Endscreen delegate
 	 */
-	public EndScreen(Dimension aDimension, boolean didWin, int score, int timeLeft, int aHealth, int levelPlayed,EndScreenDelegate aDelegate) {
-		delegate = aDelegate;
-		
-		won = didWin;
-		totalScore = score + timeLeft;
-		lastLevelPlayed = levelPlayed;
-		health = aHealth;
-		
-		setFocusable(true);
-		addKeyListener(this);
-		addMouseListener(this);
+	//boolean didWin, int score, int timeLeft, int aHealth, int levelPlayed,EndScreenDelegate aDelegate
+	public EndScreen(Container container, GameView gameView, boolean won) {
+		this.won = won;
+		int score = gameView.getScore();
+		totalScore = score + gameView.getTimeLeft();;
+		gameView.setScore(totalScore);
+		int lastLevelPlayed = gameView.getLevel();
 		
 		setBackground(Color.BLACK);
-		setSize(aDimension);
+		setSize(container.getDimension());
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		
 		String str;
 		if (won) {
-			str = Game.addExtraSpaces(String.format("Completed Level %02d", levelPlayed));
+			str = Game.addExtraSpaces(String.format("Completed Level %02d", lastLevelPlayed));
 		} else {
 			str = Game.addExtraSpaces("Game Over!");
 		}
@@ -95,7 +86,7 @@ public class EndScreen extends JPanel implements ActionListener, KeyListener, Mo
 		add(scoreLabel);
 		
 		if (won) {
-			bonusLabel = new JLabel(Game.addExtraSpaces("Time Bonus " + timeLeft));
+			bonusLabel = new JLabel(Game.addExtraSpaces("Time Bonus " + gameView.getTimeLeft()));
 			bonusLabel.setHorizontalAlignment(JLabel.CENTER);
 			bonusLabel.setFont(Game.font);
 			bonusLabel.setForeground(Color.WHITE);
@@ -150,9 +141,6 @@ public class EndScreen extends JPanel implements ActionListener, KeyListener, Mo
 			layout.putConstraint(SpringLayout.NORTH, totalScoreLabel,
 	                0,
 	                SpringLayout.SOUTH, bonusLabel);
-
-			timer = new Timer(TIME_SHOWN, this);
-			timer.start();
 		}
 		
 		else {
@@ -171,28 +159,14 @@ public class EndScreen extends JPanel implements ActionListener, KeyListener, Mo
 	                SpringLayout.SOUTH, recordDirectionsLabel);
 		}
 		
-		delegate.startSequencer();
+//		delegate.startSequencer();
 	}
 	
-	/**
-	 * Required ActionListener method. Called when timer fires.
-	 * 
-	 * @param e The ActionEvent object
-	 */
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == timer) {
-			if (won) {
-				delegate.newLevel(totalScore, lastLevelPlayed+1, health);
-			}
-		}
-	}
-	
-	/**
-	 * Stops the timer, if running.
-	 */
-	public void stop() {
-		if (timer != null && timer.isRunning()) {
-			timer.stop();
+	public void update() {
+		super.update();
+		
+		if (won && getCycleCount() % SceneDirector.getInstance().secondsToCycles(10) == 0) {
+			SceneDirector.getInstance().popScene();
 		}
 	}
 	
@@ -226,68 +200,11 @@ public class EndScreen extends JPanel implements ActionListener, KeyListener, Mo
 		}
 		
 		else if (name.length() > 0 && e.getKeyCode() == KeyEvent.VK_ENTER) {
-			delegate.recordScore(totalScore, name.trim());
-			delegate.showMainMenu();
+			HighScoreDataCollector.getInstance().recordScore(totalScore, name.trim());
+			
+			SceneDirector.getInstance().popToRootScene();
 		}
 		
 		nameLabel.setText(Game.addExtraSpaces(name));
 	}
-
-	
-	/**
-	 * Required, but unused KeyListener methods. See API for more information.
-	 * @param e The KeyEvent object
-	 */
-	public void keyReleased(KeyEvent e) { }
-	public void keyTyped(KeyEvent e) { }
-	
-	/**
-	 * Called when user presses a mouse button. Requests focus in window.
-	 * 
-	 * @param e The MouseEvent object
-	 */
-	public void mousePressed(MouseEvent e) {
-		this.requestFocusInWindow();
-	}
-	
-	/**
-	 * Required, but unused MouseListener methods. See API for more information.
-	 * @param e The MouseEvent object
-	 */
-	public void mouseClicked(MouseEvent e) { }
-	public void mouseEntered(MouseEvent e) { }
-	public void mouseExited(MouseEvent e) { }
-	public void mouseReleased(MouseEvent e) {}
-}
-
-/**
- * EndScreenDelegate
- * Required methods for classes that implement this interface.
- * 
- * @author Ryan Ashcraft
- */
-interface EndScreenDelegate {
-	/**
-	 * Shows the main menu.
-	 */
-	public void showMainMenu();
-	/**
-	 * Records the score.
-	 * 
-	 * @param totalScore The score value
-	 * @param text The name of the scorer
-	 */
-	public void recordScore(int totalScore, String name);
-	/**
-	 * Starts the MIDI sequencer.
-	 */
-	public void startSequencer();
-	/**
-	 * Called when the level is over to start a new level.
-	 * 
-	 * @param score The score
-	 * @param level The level just played
-	 * @param health The health
-	 */
-	public void newLevel(int score, int level, int health);
 }

@@ -159,7 +159,7 @@ public abstract class MovingSprite extends Sprite {
 	public void hurt() {
 		if (immunity <= 0) {
 			health--;
-			immunity = GameView.secondsToSteps(1);
+			immunity = SceneDirector.getInstance().secondsToCycles(1);
 		}
 	}
 

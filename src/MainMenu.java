@@ -9,6 +9,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 
 import javax.swing.*;
 
@@ -25,14 +28,10 @@ import javax.swing.*;
  * @version 1.0 12/03/2010
  */
 
-public class MainMenu extends JPanel implements MouseListener, KeyListener, ActionListener {	
-	private MainMenuDelegate delegate;
+public class MainMenu extends Scene {	
 	private JLabel logo;
 	private JLabel playGameLabel;
 	private JLabel highScoresLabel;
-	
-	private Timer timer;
-	private int stepCount;
 	
 	private static final Color red = new Color(200, 56, 56);
 	private static final Color green = new Color(56, 200, 56);
@@ -40,20 +39,14 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Acti
 	private static final Color yellow = new Color(200, 174, 56);
 	
 	/**
-	 * Constructor for MainMenu objecs. Shows the logo, instructions.
+	 * Constructor for MainMenu objects. Shows the logo, instructions.
 	 * 
 	 * @param aDimension The size
 	 * @param aDelegate The MainMenuDelegate object
 	 */
-	public MainMenu(Dimension aDimension, MainMenuDelegate aDelegate) {
-		delegate = aDelegate;
-
-		setFocusable(true);
-		addKeyListener(this);
-		addMouseListener(this);
-
+	public MainMenu(Container container) {
 		setBackground(Color.BLACK);
-		setSize(aDimension);
+		setSize(container.getDimension());
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		
@@ -106,9 +99,6 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Acti
 		layout.putConstraint(SpringLayout.SOUTH, copyrightLabel,
                 -25,
                 SpringLayout.SOUTH, this);
-		
-		timer = new Timer(120*4, this);
-		timer.start();
 	}
 	
 	/**
@@ -119,51 +109,32 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Acti
 	 */
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-			case KeyEvent.VK_M: delegate.mute(); break;
-			case KeyEvent.VK_ENTER: delegate.startGame(); break;
-			case KeyEvent.VK_O: delegate.openFile(); break;
-			case KeyEvent.VK_H: delegate.showHighScoreView(); break;
+			case KeyEvent.VK_ENTER:
+				SceneDirector.getInstance().pushScene(new GameView(SceneDirector.getInstance().getContainer()));
+				break;
+			case KeyEvent.VK_O:
+				String[] level = LevelReader.readLevelFile();
+				SceneDirector.getInstance().pushScene(new GameView(SceneDirector.getInstance().getContainer(), level));
+				break;
+			case KeyEvent.VK_H:
+				SceneDirector.getInstance().pushScene(new HighScoreView(SceneDirector.getInstance().getContainer()));
+				break;
 		}
 	}
-
-	/**
-	 * Required, but unused KeyListener methods. See API for more information.
-	 * @param e The KeyEvent object
-	 */
-	public void keyReleased(KeyEvent e) { }
-	public void keyTyped(KeyEvent e) { }
-	
-	/**
-	 * Called when user presses a mouse button. Requests focus in window.
-	 * 
-	 * @param e The MouseEvent object
-	 */
-	public void mousePressed(MouseEvent e) {
-		this.requestFocusInWindow();
-	}
-	
-	/**
-	 * Required, but unused MouseListener methods. See API for more information.
-	 * @param e The MouseEvent object
-	 */
-	public void mouseClicked(MouseEvent e) { }
-	public void mouseEntered(MouseEvent e) { }
-	public void mouseExited(MouseEvent e) { }
-	public void mouseReleased(MouseEvent e) { }
 
 	/**
 	 * Required ActionListener method. Called when timer fires.
 	 * 
 	 * @param e The ActionEvent object
 	 */
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == timer) {
-			if (stepCount <= 0) {
-				delegate.startSequencer();
-			}
-			
-			setLogoColor(stepCount++);
+	public void update() {
+		super.update();
+		
+		if (getCycleCount() <= 0) {
+//			delegate.startSequencer();
 		}
+		
+		setLogoColor(getCycleCount());
 	}
 	
 	/**
@@ -172,52 +143,16 @@ public class MainMenu extends JPanel implements MouseListener, KeyListener, Acti
 	 * @param stepCount The times the timer has fired
 	 */
 	public void setLogoColor(int stepCount) {
-		if (stepCount % 4 == 0) {
+		if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == 0) {
 			logo.setForeground(red);
-		} else if (stepCount % 4 == 1) {
+		} else if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == SceneDirector.getInstance().secondsToCycles(1)) {
 			logo.setForeground(green);
-		} else if (stepCount % 4 == 2) {
+		} else if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == SceneDirector.getInstance().secondsToCycles(2)) {
 			logo.setForeground(blue);
-		} else {
+		} else if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == SceneDirector.getInstance().secondsToCycles(3)) {
 			logo.setForeground(yellow);
 		}
 		
 		repaint();
 	}
-	
-	/**
-	 * Stops the timer.
-	 */
-	public void stop() {
-		timer.stop();
-	}
-}
-
-/**
- * MainMenuDelegate
- * Required methods for classes that implement this interface.
- * 
- * @author Ryan Ashcraft
- */
-interface MainMenuDelegate {
-	/**
-	 * Starts the game.
-	 */
-	public void startGame();
-	/**
-	 * Starts the MIDI sequencer.
-	 */
-	public void startSequencer();
-	/**
-	 * Requests to open a file.
-	 */
-	public void openFile();
-	/**
-	 * Mutes the MIDI sequencer.
-	 */
-	public void mute();
-	/**
-	 * Shows the high score view.
-	 */
-	public void showHighScoreView();
 }

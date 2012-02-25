@@ -89,7 +89,7 @@ public class Bro extends MovingSprite {
 	 */
 	public void boostSpeed() {
 		moveDistance = 2;
-		boostSpeedStarStepCount = GameView.secondsToSteps(14);
+		boostSpeedStarStepCount = SceneDirector.getInstance().secondsToCycles(14);
 	}
 	
 	/**

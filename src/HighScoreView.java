@@ -22,9 +22,7 @@ import javax.swing.SpringLayout;
  * @version 1.0 12/03/2010
  */
 
-public class HighScoreView extends JPanel implements KeyListener, MouseListener {
-	private HighScoreViewDelegate delegate;
-	
+public class HighScoreView extends Scene {	
 	private JLabel titleLabel;
 	private JLabel[] resultLabels;
 	
@@ -36,17 +34,14 @@ public class HighScoreView extends JPanel implements KeyListener, MouseListener 
 	 * @param holders The high scorer names
 	 * @param aDelegate The HighScoreViewDelegate object
 	 */
-	public HighScoreView(Dimension aDimension, int[] scores, String[] holders, HighScoreViewDelegate aDelegate) {
-		delegate = aDelegate;
-		
-		setFocusable(true);
-		addKeyListener(this);
-		addMouseListener(this);
-		
+	public HighScoreView(Container container) {		
 		setBackground(Color.BLACK);
-		setSize(aDimension);
+		setSize(container.getDimension());
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
+		
+		int[] scores = HighScoreDataCollector.getInstance().getRecordScores();
+		String[] holders = HighScoreDataCollector.getInstance().getRecordHolders();
 		
 		titleLabel = new JLabel(Game.addExtraSpaces("High Scores"));
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -96,49 +91,10 @@ public class HighScoreView extends JPanel implements KeyListener, MouseListener 
 	 */
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-			case KeyEvent.VK_M: delegate.mute(); break;
-			case KeyEvent.VK_H: delegate.showMainMenu(); break;
+			case KeyEvent.VK_H:
+				SceneDirector.getInstance().popScene();
+				
+				break;
 		}
 	}
-
-	/**
-	 * Required, but unused KeyListener methods. See API for more information.
-	 * @param e The KeyEvent object
-	 */
-	public void keyReleased(KeyEvent e) { }
-	public void keyTyped(KeyEvent e) { }
-
-	/**
-	 * Called when user presses a mouse button. Requests focus in window.
-	 * 
-	 * @param e The MouseEvent object
-	 */
-	public void mousePressed(MouseEvent e) {
-		this.requestFocusInWindow();
-	}
-	
-	/**
-	 * Required, but unused MouseListener methods. See API for more information.
-	 * @param e The MouseEvent object
-	 */
-	public void mouseClicked(MouseEvent e) { }
-	public void mouseEntered(MouseEvent e) { }
-	public void mouseExited(MouseEvent e) { }
-	public void mouseReleased(MouseEvent e) { }
-}
-
-/**
- * HighScoreViewDelegate
- * 
- * @author Ryan Ashcraft
- */
-interface HighScoreViewDelegate {
-	/**
-	 * Shows the main menu.
-	 */
-	public void showMainMenu();
-	/**
-	 * Mutes the MIDI sequencer.
-	 */
-	public void mute();
 }

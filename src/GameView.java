@@ -36,8 +36,11 @@ import javax.swing.Timer;
  * @version 1.0 12/03/2010
  */
 
-public class GameView extends JPanel implements KeyListener, MouseListener, ActionListener, MovingSpriteDelegate, BombDelegate, FireDelegate, HeuristicDelegate {
-	private GameViewDelegate delegate;
+public class GameView extends Scene implements MovingSpriteDelegate, BombDelegate, FireDelegate, HeuristicDelegate {
+	private final int DEFAULT_SCORE = 0;
+	private final int DEFAULT_LEVEL = 1;
+	private final int DEFAULT_HEALTH = 3;
+
 	private Bro bro;
 	private ArrayList<Foe> foes = new ArrayList<Foe>();
 	private Bomb bomb;
@@ -45,9 +48,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	private ArrayList<Rupee> rupees = new ArrayList<Rupee>();
 	private ArrayList<Heart> hearts = new ArrayList<Heart>();
 	private ArrayList<Star> stars = new ArrayList<Star>();
-	private Timer timer;
-	private static final int REPAINT_TIMER_DURATION = 15;
-	private int stepCount = 0;
+	
 	private final int MAX_BOMB_DISTANCE = 3;
 	private int score = 0;
 	private int level;
@@ -65,8 +66,6 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	private int timeLeft;
 	private int lastStepsLeft;
 	private boolean gameOver;
-	private boolean paused;
-	private boolean muted;
 	
 	/**
 	 * Constructor for GameView objects that chains to another constructor, sending null for the string array to fille.
@@ -78,8 +77,8 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	 * @param aHealth The health to start with
 	 * @param aDelegate The GameViewDelegate object
 	 */
-	public GameView(Dimension aDimension, int aScore, int aLevel, int aHealth, GameViewDelegate aDelegate) {
-		this(aDimension, null, aScore, aLevel, aHealth, aDelegate);
+	public GameView(Container container) {
+		this(container, null);
 	}
 	
 	/**
@@ -94,20 +93,14 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	 * @param aHealth The health to start with
 	 * @param aDelegate The GameViewDelegate object
 	 */
-	public GameView(Dimension aDimension, String[] stringArray, int aScore, int aLevel, int aHealth, GameViewDelegate aDelegate) {
-		delegate = aDelegate;
-		
-		score = aScore;
-		level = aLevel;
-		
-		setFocusable(true);
-		addKeyListener(this);
-		addMouseListener(this);
+	public GameView(Container container, String[] stringArray) {		
+		score = DEFAULT_SCORE;
+		level = DEFAULT_LEVEL;
 		
 		scoreBoard = new ScoreBoard(new Point(-32/2, - SCOREBOARD_HEIGHT - 32), new Dimension(32 * 17 - 32/2, SCOREBOARD_HEIGHT));
 				
 		setBackground(Color.BLACK);
-		setSize(aDimension);
+		setSize(container.getDimension());
 		
 		tiles = new Tile[13][17];
 		for (int r = 0; r < tiles.length; r++) {
@@ -121,20 +114,18 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 			}
 		}
 
+		bro = new Bro(this);
+		bro.setHealth(DEFAULT_HEALTH);
+		
 		if (stringArray == null) {
 			randomlyFill();
 		} else {
 			fillWithArray(stringArray);
 		}
 		
-		bro.setHealth(aHealth);
-		
-		timer = new Timer(REPAINT_TIMER_DURATION, this);
-		timer.start();
-		
 		timeLeft = TIME_TO_WIN;
 		
-		act();
+		update();
 	}
 	
 	/**
@@ -168,7 +159,6 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 			tiles[r][c] = new Brick(r, c, aSprite);
 		}
 		
-		bro = new Bro(this);
 		bro.setLoc(tiles[1][1].getLoc());
 		
 		final int BASE_NUMBER_OF_FOES = 2;
@@ -244,15 +234,6 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		if (paused) {
-			Font font = Game.font;
-			FontMetrics fm = g.getFontMetrics(font);
-			g.setFont(font);
-			g.setColor(Color.WHITE);
-			g.drawString("Paused", (getSize().width - fm.stringWidth("Paused"))/2, (getSize().height - fm.getHeight())/2);
-			return;
-		}
-		
 		g.translate(32/2, SCOREBOARD_HEIGHT + 32);
 		
 		scoreBoard.draw(g);
@@ -306,9 +287,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 			case KeyEvent.VK_LEFT: bro.moveLeft(); break;
 			case KeyEvent.VK_RIGHT: bro.moveRight(); break;
 			case KeyEvent.VK_SPACE: placeBomb(); break;
-			case KeyEvent.VK_P: pause(); break;
-			case KeyEvent.VK_M: mute(); break;
-			case KeyEvent.VK_Q: delegate.showEndScreen(false, score, timeLeft, bro.getHealth(), level); return;
+			case KeyEvent.VK_C: cheat(); break;
 		}
 	}
 
@@ -328,54 +307,15 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	}
 
 	/**
-	 * Called when user types a key. Performs specified action based on
-	 * key typed.
-	 * 
-	 * @param e The KeyEvent object
-	 */
-	public void keyTyped(KeyEvent e) { }
-
-	/**
-	 * Called when user presses a mouse button. Requests focus in window.
-	 * 
-	 * @param e The MouseEvent object
-	 */
-	public void mousePressed(MouseEvent e) {
-		this.requestFocusInWindow();
-	}
-	
-	/**
-	 * Required, but unused MouseListener methods. See API for more information.
-	 * @param e The MouseEvent object
-	 */
-	public void mouseClicked(MouseEvent e) { }
-	public void mouseEntered(MouseEvent e) { }
-	public void mouseExited(MouseEvent e) { }
-	public void mouseReleased(MouseEvent e) { }
-
-	public static int secondsToSteps(int seconds) {
-		return seconds * 1000 / REPAINT_TIMER_DURATION;
-	}
-
-	/**
-	 * Required ActionListener method. Called when timer fires.
-	 * 
-	 * @param e The ActionEvent object
-	 */
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == timer) {
-			act();
-		}
-	}
-
-	/**
 	 * Called when timer fires and tells each sprite to do something. Calls to check
 	 * collisions on all moving sprites (bro and foes), and checks to see if game should
 	 * end. Also sets the scoreboard's values.
 	 */
-	public void act() {
-		if (stepCount <= 0) {
-			delegate.startSequencer();
+	public void update() {
+		super.update();
+		
+		if (getCycleCount() <= 0) {
+//			delegate.startSequencer();
 		}
 		
 		if (bro != null) {
@@ -394,7 +334,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 			fires.get(i).act();
 		}
 		
-		if ((int)(stepCount * REPAINT_TIMER_DURATION/1000.0) != (int)((stepCount-1) * REPAINT_TIMER_DURATION/1000.0)) {
+		if (getCycleCount() != 0 && getCycleCount() % SceneDirector.getInstance().secondsToCycles(1) == 0) {
 			timeLeft--;
 		}
 		
@@ -404,11 +344,8 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		scoreBoard.setRupeesLeft(rupeesLeft());
 		scoreBoard.setLevel(level);
 		
-		Grass.setBackgroundWithTime((int)(stepCount * REPAINT_TIMER_DURATION/1000.0));
-		
-		stepCount++;
-		repaint();
-		
+		Grass.setBackgroundWithTime(getCycleCount() * SceneDirector.UPDATE_DELAY / 1000);
+				
 		if (bro != null) {
 			checkCollisions(bro);
 		}
@@ -425,7 +362,10 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 			
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
-					delegate.showEndScreen(true, score, timeLeft, bro.getHealth(), level);
+//					delegate.showEndScreen(true, score, timeLeft, bro.getHealth(), level);
+					SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, true));
+//					SceneDirector.getInstance().popScene();
+
 					return;
 				} else {
 					lastStepsLeft--;
@@ -441,13 +381,40 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 			
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
-					delegate.showEndScreen(false, score, 0, bro.getHealth(), level);
+					SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, false));
+
+//					delegate.showEndScreen(false, score, 0, bro.getHealth(), level);
+//					SceneDirector.getInstance().popScene();
+
 					return;
 				} else {
 					lastStepsLeft--;
 				}
 			}
 		}
+	}
+	
+	public void cheat() {
+		SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, true));
+	}
+	
+	public void resume() {
+		super.resume();
+		
+		timeLeft = TIME_TO_WIN;
+		level++;
+		gameOver = false;
+		
+		foes.clear();
+		stars.clear();
+		hearts.clear();
+		fires.clear();
+		rupees.clear();
+		bomb = null;
+		
+		randomlyFill();
+		
+		update();
 	}
 	
 	/**
@@ -471,56 +438,6 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 		}
 		
 		return count + rupees.size();
-	}
-	
-	/**
-	 * Pauses the game and mutes sound effects.
-	 */
-	public void pause() {
-		if (timer.isRunning()) {
-			timer.stop();
-			delegate.mute(true);
-			paused = true;
-			
-			for (Clip sfx : soundEffects) {
-				if (sfx.isOpen() && sfx.isRunning()) {
-					sfx.stop();
-				}
-			}
-			
-			repaint();
-		} else {
-			timer.start();
-			delegate.mute(muted);
-			paused = false;
-		}
-	}
-	
-	/**
-	 * Mutes the sound effects.
-	 */
-	public void mute() {
-		if (!muted) {
-			for (Clip sfx : soundEffects) {
-				if (sfx.isOpen() && sfx.isRunning()) {
-					sfx.stop();
-				}
-			}
-			
-			delegate.mute(true);
-			muted = true;
-		} else {
-			delegate.mute(false);
-			muted = false;
-		}
-	}
-	
-	/**
-	 * Mutes or unmutes.
-	 * @param toMute Whether to mute
-	 */
-	public void setMuted(boolean toMute) {
-		muted = toMute;
 	}
 	
 	/**
@@ -827,10 +744,6 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	 * @param filename The file name of the WAV sound
 	 */
 	public void playSound(final String filename) {
-		if (muted) {
-			return;
-		}
-		
         try {
 			Clip sfx = AudioSystem.getClip();
 			soundEffects.add(sfx);
@@ -904,7 +817,7 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 				
 				if (foeRect.intersects(spriteRect)) {
 					hurt(sprite);
-					aFoe.setPauseTime(secondsToSteps(1));
+					aFoe.setPauseTime(SceneDirector.getInstance().secondsToCycles(1));
 					return;
 				}
 			}
@@ -997,18 +910,6 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 	}
 	
 	/**
-	 * Stops the timer and sound effects.
-	 */
-	public void stop() {
-		timer.stop();
-		
-		for (int i = soundEffects.size()-1; i >= 0; i--) {
-			soundEffects.get(i).stop();
-			soundEffects.get(i).close();
-		}
-	}
-	
-	/**
 	 * Places a sprite at the location of a tile.
 	 * 
 	 * @param aSprite The prize sprite to add
@@ -1052,6 +953,22 @@ public class GameView extends JPanel implements KeyListener, MouseListener, Acti
 			System.err.println("FOO!");
 		}
 		return currentState.getTile().equals(tileForPoint(bro.getCenter()));
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public int getTimeLeft() {
+		return timeLeft;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setScore(int totalScore) {
+		this.score = totalScore;
 	}
 }
 

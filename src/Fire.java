@@ -44,7 +44,7 @@ public static Image[] fireImages;
 	public void act() {	
 		stepCount++;
 		
-		if (GameView.secondsToSteps(1) == stepCount) {
+		if (SceneDirector.getInstance().secondsToCycles(1) == stepCount) {
 			delegate.stopFire(this);
 		}
 	}
