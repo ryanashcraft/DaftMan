@@ -1,11 +1,6 @@
 import java.util.Comparator;
 
 public class AStarComparator implements Comparator<Path> {
-	private HeuristicDelegate delegate;
-	
-	public AStarComparator(HeuristicDelegate delegate) {
-		this.delegate = delegate;
-	}
 	
 	/**
 	 * Compares two paths based on A-Star

@@ -1,6 +1,5 @@
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -96,7 +95,7 @@ public class Foe extends MovingSprite {
 		
 		visited.clear();
 		
-		PriorityQueue<Path> priorityQueue = new PriorityQueue<Path>(1, new AStarComparator(heuristicDelegate));
+		PriorityQueue<Path> priorityQueue = new PriorityQueue<Path>(1, new AStarComparator());
 		
 		priorityQueue.add(new Path(new State(delegate.tileForPoint(getCenter()))));
 		

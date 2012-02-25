@@ -9,9 +9,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 import javax.sound.midi.Sequencer;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 import core.SoundStore;
 

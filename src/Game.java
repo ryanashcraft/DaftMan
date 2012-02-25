@@ -1,15 +1,6 @@
 import java.awt.Font;
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequence;
-import javax.sound.midi.Sequencer;
 import javax.swing.JApplet;
 
-import core.ImageStore;
 import core.SoundStore;
 
 /**
