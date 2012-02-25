@@ -4,49 +4,45 @@ import java.awt.Component;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 /**
  * Manages images for use in the game.
  */
 public class ImageStore {
 	private static ImageStore imageStore;
-	private static MediaTracker mediaTracker;
 	
-	public final Map<String, Image> IMAGES;
+	public final Map<String, BufferedImage> IMAGES;
 	public final Map<String, Image[]> ANIMATIONS;
 	
 	/**
 	 * Constructs a new {@code ImageStore} and initializes it.
-	 * 
-	 * @param component Component that the images are loading for
 	 */
-	private ImageStore(Component component) {
+	private ImageStore() {
 		imageStore = this;
-		mediaTracker = new MediaTracker(component);
 		
-		IMAGES = new HashMap<String, Image>();
+		IMAGES = new HashMap<String, BufferedImage>();
 		ANIMATIONS = new HashMap<String, Image[]>();
 		
-		initialize();
+		try {
+			initialize();
+		} catch (IOException e) {
+			System.err.println("Error loading images!");
+			e.printStackTrace();
+		}
 	}
 	
 	/**
 	 * Initializes the images in the store.
 	 */
-	private void initialize() {
-		int imageID = 0;
-				
-		addImage("images/wall.png", "WALL", imageID++);
-		
-		try {
-        	mediaTracker.waitForAll();
-        } catch (InterruptedException e) {
-        	System.err.println("Could not load all images into ImageStore.");
-        	e.printStackTrace();
-            return;
-        }
+	private void initialize() throws IOException {				
+		addImage("images/wall.png", "WALL");
 	}
 	
 	/**
@@ -54,13 +50,12 @@ public class ImageStore {
 	 * 
 	 * @param path Relative path to image
 	 * @param name Name of image to which you wish to refer to it by
-	 * @param id Unique id of image
+	 * @throws IOException
 	 */
-	private void addImage(String path, String name, int id) {
-		Image image = Toolkit.getDefaultToolkit().createImage(path);
+	private void addImage(String path, String name) throws IOException {
+		BufferedImage image = ImageIO.read(new File(path));
 		
 		IMAGES.put(name, image);
-		mediaTracker.addImage(image, id);
 	}
 	
 	/**
@@ -79,9 +74,9 @@ public class ImageStore {
 	 * @param component Component the image store is for
 	 * @return Instance of ImageStore
 	 */
-	public static ImageStore get(Component component) {
+	public static ImageStore get() {
 		if (imageStore == null) {
-			imageStore = new ImageStore(component);
+			imageStore = new ImageStore();
 		}
 
 		return imageStore;
