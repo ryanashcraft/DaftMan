@@ -160,30 +160,6 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 		MediaTracker mt = new MediaTracker(this);
 		int imagesCount = 0;
 		
-		foeUpImages = new Image[3];
-		for (int i = 0; i < foeUpImages.length; i++) {
-			foeUpImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-up-" + (i+1) + ".png"));
-			mt.addImage(foeUpImages[i], imagesCount++);
-		}
-		
-		foeDownImages = new Image[3];
-		for (int i = 0; i < foeDownImages.length; i++) {
-			foeDownImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-down-" + (i+1)  + ".png"));
-			mt.addImage(foeDownImages[i], imagesCount++);
-		}
-		
-		foeLeftImages = new Image[3];
-		for (int i = 0; i < foeLeftImages.length; i++) {
-			foeLeftImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-left-" + (i+1)  + ".png"));
-			mt.addImage(foeLeftImages[i], imagesCount++);
-		}
-		
-		foeRightImages = new Image[3];
-		for (int i = 0; i < foeRightImages.length; i++) {
-			foeRightImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/foe-right-" + (i+1) + ".png"));
-			mt.addImage(foeRightImages[i], imagesCount++);
-		}
-		
 		bombImages = new Image[2];
 		for (int i = 0; i < bombImages.length; i++) {
 			bombImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/bomb-" + (i+1) + ".png"));
@@ -201,11 +177,6 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
         } catch (InterruptedException e) {
             return;
         }
-        
-        Foe.upImages = foeUpImages;
-        Foe.downImages = foeDownImages;
-        Foe.rightImages = foeRightImages;
-        Foe.leftImages = foeLeftImages;
         
         Bomb.bombImages = bombImages;
         Fire.fireImages = fireImages;
