@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.sound.midi.Sequencer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -166,6 +167,10 @@ public class EndScreen extends Scene {
 	
 	public void update() {
 		super.update();
+		
+		if (getCycleCount() <= 1) {
+			SoundStore.get().playSound("STRONGER", 0, 120.0f, false);
+		}
 		
 		if (won && getCycleCount() % SceneDirector.getInstance().secondsToCycles(10) == 0) {
 			SceneDirector.getInstance().popScene();

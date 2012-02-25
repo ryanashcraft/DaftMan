@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import javax.sound.midi.Sequencer;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -306,8 +307,8 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	public void update() {
 		super.update();
 		
-		if (getCycleCount() <= 0) {
-			SoundStore.get().startSequencer();
+		if (getCycleCount() <= 1) {
+			SoundStore.get().playSound("DA_FUNK", Sequencer.LOOP_CONTINUOUSLY, 120.0f, false);
 		}
 		
 		if (bro != null) {
