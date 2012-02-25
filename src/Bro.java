@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -45,7 +47,7 @@ public class Bro extends MovingSprite {
 	public void draw(Graphics g) {
 		Image[] imageArr;
 		if (direction == SpriteDirection.UP) {
-			imageArr = upImages;
+			imageArr = ImageStore.get().getAnimation("BRO_UP");
 		} else if (direction == SpriteDirection.DOWN) {
 			imageArr = downImages;
 		} else if (direction == SpriteDirection.LEFT) {

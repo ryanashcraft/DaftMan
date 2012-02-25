@@ -19,7 +19,7 @@ public class ImageStore {
 	private static ImageStore imageStore;
 	
 	public final Map<String, BufferedImage> IMAGES;
-	public final Map<String, Image[]> ANIMATIONS;
+	public final Map<String, BufferedImage[]> ANIMATIONS;
 	
 	/**
 	 * Constructs a new {@code ImageStore} and initializes it.
@@ -28,7 +28,7 @@ public class ImageStore {
 		imageStore = this;
 		
 		IMAGES = new HashMap<String, BufferedImage>();
-		ANIMATIONS = new HashMap<String, Image[]>();
+		ANIMATIONS = new HashMap<String, BufferedImage[]>();
 		
 		try {
 			initialize();
@@ -52,10 +52,12 @@ public class ImageStore {
 		
 		addImage("images/heart.png", "HEART");
 		addImage("images/heart-small.png", "SMALL_HEART");
+		
+		addAnimation("images/bro-up-%d.png", "BRO_UP", 3);
 	}
 	
 	/**
-	 * Adds an {@code Image} to the store with a path, name and id.
+	 * Adds an {@code Image} to the store with a path and name.
 	 * 
 	 * @param path Relative path to image
 	 * @param name Name of image to which you wish to refer to it by
@@ -68,6 +70,25 @@ public class ImageStore {
 	}
 	
 	/**
+	 * Adds an animation to the store with a path, name, and number of images.
+	 * 
+	 * @param path Relative path to image with %d for each image number
+	 * @param name Name of the animation to which you wish to refer to it by
+	 * @param numberOfImages Number of images in the animation
+	 * @throws IOException
+	 */
+	private void addAnimation(String path, String name, int numberOfImages) throws IOException {
+		BufferedImage[] images = new BufferedImage[numberOfImages];
+		
+		for (int i = 0; i < images.length; i++) {
+			String formattedPath = String.format(path, i + 1);
+			images[i] = ImageIO.read(new File(formattedPath));
+		}
+		
+		ANIMATIONS.put(name, images);
+	}
+	
+	/**
 	 * Get the {@code Image} for the key.
 	 * 
 	 * @param name Key for the image
@@ -75,6 +96,16 @@ public class ImageStore {
 	 */
 	public Image getImage(String name) {
 		return IMAGES.get(name);
+	}
+	
+	/**
+	 * Get the images for the key.
+	 * 
+	 * @param name Key for the animation
+	 * @return Images at that key, if any
+	 */
+	public Image[] getAnimation(String name) {
+		return ANIMATIONS.get(name);
 	}
 
 	/**
