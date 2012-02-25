@@ -1,10 +1,5 @@
-
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -22,9 +17,6 @@ import javax.swing.JApplet;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import core.ImageStore;
-
-
 
 /**
  * HW10: DAFTMAN
@@ -67,27 +59,7 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 	private HighScoreView highScoreView;
 	
 	private static Sequencer sequencer;
-	
-	private static Image wallImage;
-	private static Image brickImage;
-	
-	private static Image[] broUpImages;
-	private static Image[] broDownImages;
-	private static Image[] broLeftImages;
-	private static Image[] broRightImages;
-	private static Image[] foeUpImages;
-	private static Image[] foeDownImages;
-	private static Image[] foeLeftImages;
-	private static Image[] foeRightImages;
-	
-	private static Image[] bombImages;
-	private static Image[] fireImages;
-	private static Image yellowRupeeImage;
-	private static Image blueRupeeImage;
-	private static Image heartImage;
-	public static Image smallHeartImage;
-	public static Image starImage;
-	
+		
 	public static Font h1;
 	public static Font h2;
 	public static Font font;
@@ -154,9 +126,7 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 	 * Reads all images, sounds, and fonts used in program. Also calls to retrieve
 	 * high score list.
 	 */
-	public void prepareResources() {
-        smallHeartImage = ImageStore.get().getImage("SMALL_HEART");
-        
+	public void prepareResources() {        
         font = null;
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("fonts/ARCADECLASSIC.TTF"));
