@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 /**
  * HW10: DAFTMAN
  * I worked on this assignment alone, using course materials, previous work,
@@ -14,7 +16,14 @@ import java.awt.Image;
  */
 
 public class Star extends Sprite {
-	public static Image starImage;
+	private static Image starImage;
+	
+	/**
+	 * Star Constructor
+	 */
+	public Star() {
+		starImage = ImageStore.get().getImage("STAR");
+	}
 	
 	/**
 	 * Draws a star image.

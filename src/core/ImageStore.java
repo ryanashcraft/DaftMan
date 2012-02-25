@@ -43,6 +43,15 @@ public class ImageStore {
 	 */
 	private void initialize() throws IOException {				
 		addImage("images/wall.png", "WALL");
+		addImage("images/brick.png", "BRICK");
+		
+		addImage("images/rupee-yellow.png", "YELLOW_RUPEE");
+		addImage("images/rupee-blue.png", "BLUE_RUPEE");
+		
+		addImage("images/star.png", "STAR");
+		
+		addImage("images/heart.png", "HEART");
+		addImage("images/heart-small.png", "SMALL_HEART");
 	}
 	
 	/**

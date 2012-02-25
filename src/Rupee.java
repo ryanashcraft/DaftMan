@@ -2,6 +2,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Random;
 
+import core.ImageStore;
+
 /**
  * HW10: DAFTMAN
  * I worked on this assignment alone, using course materials, previous work,
@@ -15,8 +17,8 @@ import java.util.Random;
  */
 
 public class Rupee extends Sprite {
-	public static Image yellowRupeeImage;
-	public static Image blueRupeeImage;
+	private static Image yellowRupeeImage;
+	private static Image blueRupeeImage;
 	private Image rupeeImage;
 	private int value;
 	
@@ -27,6 +29,10 @@ public class Rupee extends Sprite {
 	 */
 	public Rupee() {
 		value = DEFAULT_VALUE;
+		
+		yellowRupeeImage = ImageStore.get().getImage("YELLOW_RUPEE");
+		blueRupeeImage = ImageStore.get().getImage("BLUE_RUPEE");
+		
 		rupeeImage = yellowRupeeImage;
 
 		// deprecated feature

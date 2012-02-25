@@ -1,3 +1,5 @@
+
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -20,6 +22,8 @@ import javax.swing.JApplet;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import core.ImageStore;
+
 
 
 /**
@@ -99,7 +103,7 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 	final int HIGH_SCORE_RECORD_COUNT = 10;
 	int[] recordScores = new int[HIGH_SCORE_RECORD_COUNT];
 	String[] recordHolders = new String[HIGH_SCORE_RECORD_COUNT];
-	
+		
 	/**
 	 * Initializes the applet.
 	 */
@@ -152,14 +156,9 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 	 */
 	public void prepareResources() {
 		// use a media tracker to make sure all images are fully loaded
+		
 		MediaTracker mt = new MediaTracker(this);
 		int imagesCount = 0;
-			
-		wallImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/wall.png"));
-		mt.addImage(wallImage, imagesCount++);
-	
-		brickImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/brick.png"));
-		mt.addImage(brickImage, imagesCount++);
 		
 		broUpImages = new Image[3];
 		for (int i = 0; i < broUpImages.length; i++) {
@@ -221,29 +220,11 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 			mt.addImage(fireImages[i], imagesCount++);
 		}
 		
-		yellowRupeeImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/rupee-yellow.png"));
-		mt.addImage(yellowRupeeImage, imagesCount++);
-		
-		blueRupeeImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/rupee-blue.png"));
-		mt.addImage(blueRupeeImage, imagesCount++);
-		
-		heartImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/heart.png"));
-		mt.addImage(heartImage, imagesCount++);
-		
-		smallHeartImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/heart-small.png"));
-		mt.addImage(smallHeartImage, imagesCount++);
-		
-		starImage = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/star.png"));
-		mt.addImage(starImage, imagesCount++);
-		
 		try {
         	mt.waitForAll();
         } catch (InterruptedException e) {
             return;
         }
-        
-        Wall.wallImage = wallImage;
-        Brick.brickImage = brickImage;
         
         Bro.upImages = broUpImages;
         Bro.downImages = broDownImages;
@@ -256,10 +237,8 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
         
         Bomb.bombImages = bombImages;
         Fire.fireImages = fireImages;
-        Rupee.yellowRupeeImage = yellowRupeeImage;
-        Rupee.blueRupeeImage = blueRupeeImage;
-        Heart.heartImage = heartImage;
-        Star.starImage = starImage;
+
+        smallHeartImage = ImageStore.get().getImage("SMALL_HEART");
         
         font = null;
 		try {

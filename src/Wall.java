@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -15,7 +17,7 @@ import java.awt.Image;
  */
 
 public class Wall extends Tile {
-	public static Image wallImage;
+	private static Image wallImage;
 
 	/**
 	 * Constructor for Wall objects. Chains to Tile's constructor. 
@@ -25,6 +27,8 @@ public class Wall extends Tile {
 	 */
 	public Wall(int aRow, int aCol) {
 		super(aRow, aCol);
+		
+		wallImage = ImageStore.get().getImage("WALL");
 	}
 
 	/**
