@@ -1,6 +1,8 @@
 import java.awt.Graphics;
 import java.awt.Image;
 
+import core.ImageStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -15,7 +17,7 @@ import java.awt.Image;
  */
 
 public class Fire extends Sprite {
-public static Image[] fireImages;
+	private static Image[] fireImages;
 	
 	protected FireDelegate delegate;
 	final double STEP_SPEED_MULTIPLIER = 0.1;
@@ -27,6 +29,8 @@ public static Image[] fireImages;
 	 */
 	public Fire(FireDelegate aDelegate) {
 		delegate = aDelegate;
+		
+		fireImages = ImageStore.get().getAnimation("FIRE");
 	}
 
 	/**

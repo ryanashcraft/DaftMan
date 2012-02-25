@@ -155,25 +155,6 @@ public class Game extends JApplet implements MainMenuDelegate, GameViewDelegate,
 	 * high score list.
 	 */
 	public void prepareResources() {
-		// use a media tracker to make sure all images are fully loaded
-		
-		MediaTracker mt = new MediaTracker(this);
-		int imagesCount = 0;
-		
-		fireImages = new Image[2];
-		for (int i = 0; i < fireImages.length; i++) {
-			fireImages[i] = Toolkit.getDefaultToolkit().createImage(getClass().getResource("images/fire-" + (i+1) + ".png"));
-			mt.addImage(fireImages[i], imagesCount++);
-		}
-		
-		try {
-        	mt.waitForAll();
-        } catch (InterruptedException e) {
-            return;
-        }
-        
-        Fire.fireImages = fireImages;
-
         smallHeartImage = ImageStore.get().getImage("SMALL_HEART");
         
         font = null;
