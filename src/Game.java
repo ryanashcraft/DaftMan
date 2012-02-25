@@ -9,6 +9,9 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.swing.JApplet;
 
+import core.ImageStore;
+import core.SoundStore;
+
 /**
  * HW10: DAFTMAN
  * This application is a take on the classic video game "Bomberman" by Hudson Soft,
@@ -43,13 +46,9 @@ import javax.swing.JApplet;
  */
 
 public class Game extends JApplet {
-	private static Sequencer sequencer;
-		
 	public static Font h1;
 	public static Font h2;
 	public static Font font;
-	
-	private boolean muted;
 	
 	/**
 	 * Initializes the applet.
@@ -71,14 +70,8 @@ public class Game extends JApplet {
 	public void destroy() {
 		HighScoreDataCollector.getInstance().closeConnection();
 		
-		stopSequencer();
-		if (sequencer != null) {
-			if (sequencer.isOpen()) {
-				sequencer.close();
-			}
-		}
-		
-		sequencer = null;
+		SoundStore.get().closeSequencer();
+		SoundStore.get().closeSoundClips();
 	}
 	
 	/**
@@ -97,107 +90,6 @@ public class Game extends JApplet {
 		font = font.deriveFont(Font.PLAIN, 26);
 		h1 = font.deriveFont(Font.PLAIN, 72);
 		h2 = font.deriveFont(Font.PLAIN, 48);
-	}
-	
-	/**
-	 * Sets the MIDI sequence to play
-	 * 
-	 * @param filename The file name of the MIDI sound file
-	 * @param repeat Whether to repeat the MIDI file
-	 * @param bpm The tempo in beats per minute for the clip 
-	 * @param overlay Whether to stop previous track
-	 */
-	public void setSequence(String filename, int repeat, float bpm, boolean overlay) {
-		if (!overlay) {
-			if (sequencer != null) {
-				if (sequencer.isRunning()) {
-					sequencer.stop();
-				}
-			}
-		}
-		
-		try {
-		    Sequence sequence = MidiSystem.getSequence(getClass().getResource("sounds/" + filename));
-
-		    sequencer = MidiSystem.getSequencer();
-		    sequencer.setLoopCount(repeat);
-		    if (bpm != 0.0) {
-		    	sequencer.setTempoInBPM(bpm);
-		    }
-		    sequencer.open();
-		    sequencer.setSequence(sequence);
-		} catch (MalformedURLException e) {
-		} catch (IOException e) {
-		} catch (MidiUnavailableException e) {
-		} catch (InvalidMidiDataException e) {
-		}
-	}
-	
-	/**
-	 * Plays the active MIDI tracks.
-	 */
-	public void startSequencer() {
-		if (muted) {
-			return;
-		}
-		
-		if (sequencer != null && sequencer.isOpen()) {
-			if (!sequencer.isRunning()) {
-				sequencer.start();
-			}
-		}
-	}
-	
-	/**
-	 * Stops the active MIDI tracks.
-	 */
-	public void stopSequencer() {
-		if (sequencer != null && sequencer.isOpen()) {
-			if (sequencer.isRunning()) {
-				sequencer.stop();
-			}
-		}
-	}
-	
-	/**
-	 * Mute the active MIDI tracks.
-	 * 
-	 * @param toMute Whether to mute
-	 */
-	public void mute(boolean toMute) {
-		muted = toMute;
-		
-		muteSounds();
-	}
-	
-	/**
-	 * Switches whether to mute the active MIDI tracks.
-	 */
-	public void mute() {
-		muted = !muted;
-		
-		muteSounds();
-	}
-	
-	/**
-	 * Tells the sequencer to stop the track, which essentially
-	 * mutes it.
-	 */
-	private void muteSounds() {
-		if (muted) {
-			if (sequencer != null && sequencer.isOpen()) {
-				if (sequencer.isRunning()) {
-					sequencer.stop();
-				}
-			}
-		} else {
-			if (sequencer != null && sequencer.isOpen()) {
-				if (!sequencer.isRunning()) {
-					sequencer.start();
-					sequencer.setTempoInBPM(120.0f);
-				}
-			}
-		}
 	}
 	
 	/**

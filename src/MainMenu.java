@@ -15,6 +15,8 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
+import core.SoundStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -119,6 +121,9 @@ public class MainMenu extends Scene {
 			case KeyEvent.VK_H:
 				SceneDirector.getInstance().pushScene(new HighScoreView(SceneDirector.getInstance().getContainer()));
 				break;
+			case KeyEvent.VK_M:
+				SoundStore.get().mute();
+				break;
 		}
 	}
 
@@ -131,7 +136,7 @@ public class MainMenu extends Scene {
 		super.update();
 		
 		if (getCycleCount() <= 0) {
-//			delegate.startSequencer();
+			SoundStore.get().startSequencer();
 		}
 		
 		setLogoColor(getCycleCount());

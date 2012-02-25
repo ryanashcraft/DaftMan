@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
+import core.SoundStore;
+
 
 /**
  * HW10: DAFTMAN
@@ -93,7 +95,9 @@ public class HighScoreView extends Scene {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_H:
 				SceneDirector.getInstance().popScene();
-				
+				break;
+			case KeyEvent.VK_M:
+				SoundStore.get().mute();
 				break;
 		}
 	}
