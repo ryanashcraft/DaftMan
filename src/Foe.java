@@ -24,6 +24,8 @@ public class Foe extends MovingSprite {
 	public static Image[] downImages;
 	public static Image[] rightImages;
 	public static Image[] leftImages;
+
+	private Image[] imageArr;
 	final static double STEP_SPEED_MULTIPLIER = 0.1;
 
 	private HeuristicDelegate heuristicDelegate;
@@ -52,18 +54,19 @@ public class Foe extends MovingSprite {
 	 * @param g The Graphics object
 	 */
 	public void draw(Graphics g) {
-		Image[] imageArr;
 		if (direction == SpriteDirection.UP) {
 			imageArr = upImages;
 		} else if (direction == SpriteDirection.DOWN) {
 			imageArr = downImages;
 		} else if (direction == SpriteDirection.LEFT) {
 			imageArr = leftImages;
-		} else {
+		} else if (direction == SpriteDirection.RIGHT) {
 			imageArr = rightImages;
 		}
 		
-		g.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);
+		if (imageArr != null) {
+			g.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);
+		}
 	}
 	
 	/**
@@ -71,13 +74,19 @@ public class Foe extends MovingSprite {
 	 * or if delegate says it should.
 	 */
 	public void act() {
+		if (isPaused()) {
+			super.act();
+			
+			return;
+		}
+
 		boolean runSearch = delegate.canSeeBro(this);
 		
 		if (runSearch) {
 			if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
 				move(aStarSearch());
 			}
-		} else if (delegate.shouldChangeDirection(this) && Math.random() * 10 < 1) {
+		} else if (delegate.shouldChangeDirection(this) && Math.random() * 10 < 1 || direction == SpriteDirection.STOP) {
 			move(SpriteDirection.values()[rand.nextInt(SpriteDirection.values().length)]);
 		}
 		

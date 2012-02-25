@@ -22,6 +22,8 @@ public abstract class MovingSprite extends Sprite {
 	
 	protected int health;
 	protected int immunity;
+
+	private int pauseTime;
 	
 	/**
 	 * Constructor for MovingSprite objects
@@ -71,6 +73,14 @@ public abstract class MovingSprite extends Sprite {
 		direction = SpriteDirection.STOP;
 	}
 	
+	public boolean isPaused() {
+		return pauseTime != 0;
+	}
+
+	public void setPauseTime(int pauseTime) {
+		this.pauseTime = pauseTime;
+	}
+
 	/**
 	 * Set moving direction to SpriteDirection parameter.
 	 * @parameter direction Direction to move
@@ -93,6 +103,12 @@ public abstract class MovingSprite extends Sprite {
 	 * Moves with each step. Points are autocorrected to avoid dangerous collisions with impassable tiles.
 	 */
 	public void act() {
+		if (isPaused()) {
+			--pauseTime;
+
+			return;
+		}
+
 		if (health <= 0) {
 			return;
 		}
