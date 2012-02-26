@@ -56,7 +56,7 @@ public class Bro extends MovingSprite {
 			g.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);
 		} else {
 			// flicker image if recently hurt
-			if (immunity % 2 == 1) {
+			if (immunity % 4 != 0) {
 				g.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);	
 			}
 		}
