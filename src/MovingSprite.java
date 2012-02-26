@@ -117,6 +117,8 @@ public abstract class MovingSprite extends Sprite {
 		Point autoCorrectedPoint = delegate.autoCorrectedPoint(newPoint, this);
 		if (autoCorrectedPoint.x != loc.x || autoCorrectedPoint.y != loc.y) {
 			stepCount++;
+		} else {
+			stopMoving();
 		}
 		loc = autoCorrectedPoint;
 	}

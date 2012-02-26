@@ -111,15 +111,17 @@ public class Foe extends MovingSprite {
 			doubt = 0;
 		}
 		
-		if (delegate.shouldChangeDirection(this) || path == null && seesBro) {
+		if (delegate.shouldChangeDirection(this)) {
 			path = aStarSearch();
 		}
 		
-		if (seesBro || doubt++ < MAX_DOUBT) {
+		if (path != null && (seesBro || doubt++ < MAX_DOUBT)) {
 			move(path.getPathway().get(1).getDirection());
 		} else if (delegate.shouldChangeDirection(this) && Math.random() * 10 < 1 || direction == SpriteDirection.STOP) {
 			path = null;
 			move(SpriteDirection.values()[rand.nextInt(SpriteDirection.values().length)]);
+		} else {
+			path = null;
 		}
 		
 		super.act();
