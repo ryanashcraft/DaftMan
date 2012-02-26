@@ -159,7 +159,7 @@ public class EndScreen extends Scene {
 		super.update();
 		
 		if (getCycleCount() <= 1) {
-			SoundStore.get().playSound("STRONGER", 0, 120.0f, false);
+			SoundStore.get().playSound("STRONGER", 0, 160.0f, false);
 		}
 		
 		if (won && getCycleCount() % SceneDirector.getInstance().secondsToCycles(10) == 0) {
