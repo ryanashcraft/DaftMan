@@ -1,5 +1,9 @@
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -26,6 +30,8 @@ public class Foe extends MovingSprite {
 	private HeuristicDelegate heuristicDelegate;
 	private Random rand;
 	
+	private Path path;
+	
 	/**
 	 * Constructor for Foe objects. Chains to MovingSprite's constructor.
 	 * 
@@ -49,6 +55,8 @@ public class Foe extends MovingSprite {
 	 * @param g The Graphics object
 	 */
 	public void draw(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
+		
 		Image[] imageArr;
 		if (direction == SpriteDirection.UP) {
 			imageArr = ImageStore.get().getAnimation("FOE_UP");
@@ -60,8 +68,26 @@ public class Foe extends MovingSprite {
 			imageArr = ImageStore.get().getAnimation("FOE_RIGHT");
 		}
 		
+		if (path != null) {
+			ArrayList<State> states = path.getPathway();
+			Point point = null;
+			
+			g2d.setColor(Color.RED);
+			g2d.setStroke(new BasicStroke(5));
+			
+			for (State state : states) {
+				if (point == null) {
+					point = state.getTile().getCenter();
+					continue;
+				}
+				
+				g2d.drawLine(point.x, point.y, state.getTile().getCenter().x, state.getTile().getCenter().y);
+				point = state.getTile().getCenter();
+			}
+		}
+		
 		if (imageArr != null) {
-			g.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);
+			g2d.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);
 		}
 	}
 	
@@ -78,9 +104,13 @@ public class Foe extends MovingSprite {
 
 		boolean runSearch = delegate.canSeeBro(this);
 		
+		if (delegate.shouldChangeDirection(this)) {
+			path = aStarSearch();
+		}
+		
 		if (runSearch) {
 			if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
-				move(aStarSearch());
+				move(path.getPathway().get(1).getDirection());
 			}
 		} else if (delegate.shouldChangeDirection(this) && Math.random() * 10 < 1 || direction == SpriteDirection.STOP) {
 			move(SpriteDirection.values()[rand.nextInt(SpriteDirection.values().length)]);
@@ -89,7 +119,7 @@ public class Foe extends MovingSprite {
 		super.act();
 	}
 	
-	public SpriteDirection aStarSearch() {
+	public Path aStarSearch() {
 		ArrayList<Tile> visited = new ArrayList<Tile>();
 		ArrayList<Path> results = new ArrayList<Path>();
 		
@@ -112,7 +142,7 @@ public class Foe extends MovingSprite {
 				if (heuristicDelegate.isGoalState(currentState)) {
 					System.out.println("Found solution");
 					if (currentPath.getPathway().size() > 1) {
-						return currentPath.getPathway().get(1).getDirection();
+						return currentPath;
 					}
 				}
 				
@@ -124,6 +154,6 @@ public class Foe extends MovingSprite {
 			}
 		}
 		
-		return SpriteDirection.STOP;
+		return null;
 	}
 }
