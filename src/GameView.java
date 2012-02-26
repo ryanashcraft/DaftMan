@@ -182,7 +182,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 				}
 				
 				else if (stringArray[r-1].charAt(c-1) == '1') {
-					bro = new Bro(this);
 					bro.setLoc(tiles[r][c].getLoc());
 				}
 				
