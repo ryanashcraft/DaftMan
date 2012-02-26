@@ -915,7 +915,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	}
 
 	public int heuristicForTile(Tile t) {
-		return 0;
+		return distanceFromBro(t.getCenter());
 	}
 	
 	public int distanceFromBro(Point point) {
