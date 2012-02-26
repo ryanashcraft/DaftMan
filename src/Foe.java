@@ -27,10 +27,13 @@ import core.ImageStore;
 public class Foe extends MovingSprite {
 	final static double STEP_SPEED_MULTIPLIER = 0.1;
 
+	private static final int MAX_DOUBT = SceneDirector.getInstance().secondsToCycles(2);
+
 	private HeuristicDelegate heuristicDelegate;
 	private Random rand;
 	
 	private Path path;
+	private int doubt;
 	
 	/**
 	 * Constructor for Foe objects. Chains to MovingSprite's constructor.
@@ -47,10 +50,11 @@ public class Foe extends MovingSprite {
 		this.heuristicDelegate = heuristicDelegate;
 		
 		rand = new Random();
+		doubt = MAX_DOUBT;
 	}
 	
 	/**
-	 * Draws a foe image, based on the direction and number of steps mvoed.
+	 * Draws a foe image, based on the direction and number of steps moved.
 	 * 
 	 * @param g The Graphics object
 	 */
@@ -102,17 +106,19 @@ public class Foe extends MovingSprite {
 			return;
 		}
 
-		boolean runSearch = delegate.canSeeBro(this);
+		boolean seesBro = delegate.canSeeBro(this);
+		if (seesBro) {
+			doubt = 0;
+		}
 		
-		if (delegate.shouldChangeDirection(this)) {
+		if (delegate.shouldChangeDirection(this) || path == null && seesBro) {
 			path = aStarSearch();
 		}
 		
-		if (runSearch) {
-			if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
-				move(path.getPathway().get(1).getDirection());
-			}
+		if (seesBro || doubt++ < MAX_DOUBT) {
+			move(path.getPathway().get(1).getDirection());
 		} else if (delegate.shouldChangeDirection(this) && Math.random() * 10 < 1 || direction == SpriteDirection.STOP) {
+			path = null;
 			move(SpriteDirection.values()[rand.nextInt(SpriteDirection.values().length)]);
 		}
 		
