@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -51,6 +52,8 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	private Tile[][] tiles;
 	private ScoreBoard scoreBoard;
 	private final int SCOREBOARD_HEIGHT = 80;
+	private final int OFFSET_X = 16;
+	private final int OFFSET_Y = 32;
 
 	private int timeLeft;
 	private int lastStepsLeft;
@@ -86,7 +89,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		score = DEFAULT_SCORE;
 		level = DEFAULT_LEVEL;
 		
-		scoreBoard = new ScoreBoard(new Point(-32/2, - SCOREBOARD_HEIGHT - 32), new Dimension(32 * 17 - 32/2, SCOREBOARD_HEIGHT));
+		scoreBoard = new ScoreBoard(new Point(-OFFSET_X, - SCOREBOARD_HEIGHT - OFFSET_Y), new Dimension(OFFSET_Y * 17 - OFFSET_X, SCOREBOARD_HEIGHT));
 				
 		setBackground(Color.BLACK);
 		setSize(container.getDimension());
@@ -222,7 +225,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.translate(32/2, SCOREBOARD_HEIGHT + 32);
+		g.translate(OFFSET_X, SCOREBOARD_HEIGHT + OFFSET_Y);
 		
 		scoreBoard.draw(g);
 		
@@ -285,7 +288,9 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	 * 
 	 * @param e The KeyEvent object
 	 */
-	public void keyReleased(KeyEvent e) {		
+	public void keyReleased(KeyEvent e) {
+		super.keyReleased(e);
+		
 		if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
 			bro.stopMoveY();
 		}
@@ -295,6 +300,14 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		}
 	}
 
+	public void mouseReleased(MouseEvent e) {
+		super.mouseReleased(e);
+		
+		Foe newFoe = new Foe(this, this);
+		newFoe.setLoc(tileForPoint(new Point(e.getPoint().x - OFFSET_X, e.getPoint().y - SCOREBOARD_HEIGHT - OFFSET_Y)).getLoc());
+		foes.add(newFoe);
+	}
+	
 	/**
 	 * Called when timer fires and tells each sprite to do something. Calls to check
 	 * collisions on all moving sprites (bro and foes), and checks to see if game should

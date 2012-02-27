@@ -135,5 +135,11 @@ public class SceneDirector extends JComponent implements ActionListener, KeyList
 
 	public void mouseReleased(MouseEvent e) {
 		requestFocus();
+		
+		if (scenes.isEmpty()) {
+			return;
+		}
+		
+		scenes.peek().mouseReleased(e);
 	}
 }

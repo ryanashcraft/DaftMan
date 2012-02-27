@@ -1,9 +1,11 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-public abstract class Scene extends JPanel implements KeyListener {
+public abstract class Scene extends JPanel implements KeyListener, MouseListener {
 	private int cycleCount = 0;
 	
 	public int getCycleCount() {
@@ -30,5 +32,20 @@ public abstract class Scene extends JPanel implements KeyListener {
 
 	public void keyTyped(KeyEvent e) {
 		
+	}
+	
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mousePressed(MouseEvent e) {
+	}
+
+	public void mouseReleased(MouseEvent e) {
 	}
 }
