@@ -53,40 +53,32 @@ public class SceneDirector extends JComponent implements ActionListener, KeyList
 		return seconds * 1000 / UPDATE_DELAY;
 	}
 	
-	public void pushScene(Scene newScene) {
-		add(newScene);
-		
+	public void pushScene(Scene newScene) {		
 		if (!scenes.isEmpty()) {
-			scenes.peek().transferFocus();
 			remove(scenes.peek());
 		}
 		
 		scenes.push(newScene);
+		add(newScene);
 		newScene.start();
 	}
 	
 	public void popScene() {
 		if (!scenes.isEmpty()) {
 			Scene oldScene = scenes.pop();
-			
+			remove(oldScene);
 			add(scenes.peek());
 			scenes.peek().resume();
-			
-			oldScene.transferFocus();
-			
-			remove(oldScene);
 		}
 	}
 	
 	public void popToRootScene() {
-		Scene root = scenes.get(0);
-		
-		add(root);
-		root.resume();
-		
-		scenes.peek().transferFocus();
 		remove(scenes.peek());
 		
+		Scene root = scenes.get(0);
+		add(root);
+		root.resume();
+				
 		scenes.removeAllElements();
 		scenes.add(root);
 	}
