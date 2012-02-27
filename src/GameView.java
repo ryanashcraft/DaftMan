@@ -469,17 +469,9 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 				if (tile != null) {
 					int cost = 1;
 					
-					for (Fire fire : fires) {
-						if (tileForPoint(fire.getCenter()) == tile) {
-							cost = Integer.MAX_VALUE;
-						}
-					}
-					
-					if (bomb != null) {
-						double distanceToBomb = euclidieanDistance(bomb.getCenter(), newPoint);
-						if (distanceToBomb <= MAX_BOMB_DISTANCE * Tile.size.getHeight()) {
-							cost = Integer.MAX_VALUE;
-						}
+					if (!isTileSafe(tile)) {
+						cost = Integer.MAX_VALUE;
+						continue;
 					}
 					
 					successors.add(new State(tile, SpriteDirection.values()[i], cost));
@@ -936,10 +928,59 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	}
 
 	public boolean isGoalState(State currentState) {
-		if (currentState == null) {
-			System.err.println("FOO!");
+		if (bomb != null) {
+			if (!isTileSafe(tileForPoint(bro.getCenter()))) {				
+				Tile tile = currentState.getTile();
+				if (isTileSafe(tile)) {
+					for (int r = tile.getRow() - 1; r <= tile.getRow() + 1; r++) {
+						for (int c = tile.getCol() - 1; c <= tile.getCol() + 1; c++) {
+							r++;
+							c++;
+							if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[r].length) {
+								if (!isTileSafe(tiles[r][c])) {
+									return true;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				return false;
+			}
 		}
+		
 		return currentState.getTile().equals(tileForPoint(bro.getCenter()));
+	}
+	
+	public double distanceToTileDistance(double distance) {
+		return distance / ((Tile.size.height + Tile.size.width) / 2); 
+	}
+	
+	public boolean isTileSafe(Tile tile) {
+		for (Fire fire : fires) {
+			if (tileForPoint(fire.getCenter()) == tile) {
+				return false;
+			}
+		}
+		
+		if (bomb != null) {
+//			double distanceToBomb = euclidieanDistance(bomb.getCenter(), tile.getCenter());
+//			if (distanceToTileDistance(distanceToBomb) <= MAX_BOMB_DISTANCE) {
+//				return false;
+//			}
+			
+			if (tile.getCenter().x == bomb.getCenter().x) {
+				if (Math.abs(tile.getRow() - tileForPoint(bomb.getCenter()).getRow()) < MAX_BOMB_DISTANCE) {
+					return false;
+				}
+			} else if (tile.getCenter().y == bomb.getCenter().y) {
+				if (Math.abs(tile.getCol() - tileForPoint(bomb.getCenter()).getCol()) < MAX_BOMB_DISTANCE) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 
 	public int getScore() {

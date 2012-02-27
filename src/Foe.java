@@ -108,7 +108,7 @@ public class Foe extends MovingSprite {
 			path = aStarSearch();
 		}
 		
-		if (runSearch) {
+		if (runSearch && path != null) {
 			if (delegate.shouldChangeDirection(this) || direction == SpriteDirection.STOP) {
 				move(path.getPathway().get(1).getDirection());
 			}
@@ -128,9 +128,7 @@ public class Foe extends MovingSprite {
 		PriorityQueue<Path> priorityQueue = new PriorityQueue<Path>(1, new AStarComparator());
 		
 		priorityQueue.add(new Path(new State(delegate.tileForPoint(getCenter()))));
-		
-		System.out.println("Searching...");
-		
+				
 		while (!priorityQueue.isEmpty()) {
 			Path currentPath = priorityQueue.remove();
 			State currentState = currentPath.getLastState();
@@ -140,7 +138,6 @@ public class Foe extends MovingSprite {
 				results.add(currentPath);
 				
 				if (heuristicDelegate.isGoalState(currentState)) {
-					System.out.println("Found solution");
 					if (currentPath.getPathway().size() > 1) {
 						return currentPath;
 					}
