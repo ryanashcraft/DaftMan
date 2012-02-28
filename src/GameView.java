@@ -509,33 +509,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	}
 	
 	/**
-	 * Returns whether there is a tile horizontally or vertically adjacent
-	 * to it that is passable.
-	 * 
-	 * @param aTile The center tile
-	 * @return Whether an adjacent tile is passable
-	 */
-	public boolean adjacentTileMoveExists(Tile aTile) {
-		int tileRow = aTile.getRow() + 1;
-		int tileCol = aTile.getCol() + 1;
-		
-		// now check to make sure there is an alternative direction
-		for (int r = Math.max(0, tileRow-1); r <= Math.min(tiles.length-1, tileRow+1); r++) {
-			if (tiles[r][tileCol] != aTile && !tiles[r][tileCol].isImpassable() && isTileSafe(tiles[r][tileCol])) {
-				return true;
-			}
-		}
-		
-		for (int c = Math.max(0, tileCol-1); c <= Math.min(tiles[tiles.length-1].length, tileCol+1); c++) {
-			if (tiles[tileRow][c] != aTile && !tiles[tileRow][c].isImpassable() && isTileSafe(tiles[tileRow][c])) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	/**
 	 * Returns the corrected point for the MovingSprite to move to, based off of
 	 * the point it wants to move to after it tries to move.
 	 * 
@@ -943,6 +916,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 				}
 			}
 		}
+		
 		return successors.iterator();
 	}
 
@@ -950,7 +924,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		if (bomb != null) {
 			Tile broTile = tileForPoint(bro.getCenter());
 			if (!isTileSafe(broTile)) {
-				System.out.println("Bro is NOT safe!");
 				Iterator<Tile> adjacentTiles = adjacentTiles(currentState.getTile());
 				while (adjacentTiles.hasNext()) {
 					if (!isTileSafe(adjacentTiles.next())) {
@@ -963,6 +936,33 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		return currentState.getTile().equals(tileForPoint(bro.getCenter()));
 	}
 	
+	/**
+	 * Returns whether there is a tile horizontally or vertically adjacent
+	 * to it that is passable.
+	 * 
+	 * @param aTile The center tile
+	 * @return Whether an adjacent tile is passable
+	 */
+	public boolean adjacentTileMoveExists(Tile aTile) {
+		int tileRow = aTile.getRow() + 1;
+		int tileCol = aTile.getCol() + 1;
+		
+		// now check to make sure there is an alternative direction
+		for (int r = Math.max(0, tileRow-1); r <= Math.min(tiles.length-1, tileRow+1); r++) {
+			if (tiles[r][tileCol] != aTile && !tiles[r][tileCol].isImpassable() && isTileSafe(tiles[r][tileCol])) {
+				return true;
+			}
+		}
+		
+		for (int c = Math.max(0, tileCol-1); c <= Math.min(tiles[tiles.length-1].length, tileCol+1); c++) {
+			if (tiles[tileRow][c] != aTile && !tiles[tileRow][c].isImpassable() && isTileSafe(tiles[tileRow][c])) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 	public Iterator<Tile> adjacentTiles(Tile aTile) {
 		int tileRow = aTile.getRow() + 1;
 		int tileCol = aTile.getCol() + 1;
