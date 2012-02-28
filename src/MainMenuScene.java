@@ -19,7 +19,7 @@ import core.SoundStore;
  * @version 1.0 12/03/2010
  */
 
-public class MainMenu extends Scene {	
+public class MainMenuScene extends Scene {	
 	private JLabel logo;
 	private JLabel playGameLabel;
 	private JLabel highScoresLabel;
@@ -36,7 +36,7 @@ public class MainMenu extends Scene {
 	 * @param aDimension The size
 	 * @param aDelegate The MainMenuDelegate object
 	 */
-	public MainMenu(Container container) {
+	public MainMenuScene(Container container) {
 		super(container);
 		
 		setBackground(Color.BLACK);

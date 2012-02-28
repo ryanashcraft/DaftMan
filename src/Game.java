@@ -51,7 +51,7 @@ public class Game extends JApplet {
 		
 		prepareResources();
 		
-		SceneDirector.getInstance().pushScene(new MainMenu(SceneDirector.getInstance().getContainer()));
+		SceneDirector.getInstance().pushScene(new MainMenuScene(SceneDirector.getInstance().getContainer()));
 		
 		add(SceneDirector.getInstance());
 	}
