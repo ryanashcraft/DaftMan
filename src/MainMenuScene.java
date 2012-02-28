@@ -131,11 +131,11 @@ public class MainMenuScene extends Scene {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_ENTER:
-				SceneDirector.getInstance().pushScene(new GameView(SceneDirector.getInstance().getContainer()));
+				SceneDirector.getInstance().pushScene(new GameScene(SceneDirector.getInstance().getContainer()));
 				break;
 			case KeyEvent.VK_O:
 				String[] level = LevelReader.readLevelFile();
-				SceneDirector.getInstance().pushScene(new GameView(SceneDirector.getInstance().getContainer(), level));
+				SceneDirector.getInstance().pushScene(new GameScene(SceneDirector.getInstance().getContainer(), level));
 				break;
 			case KeyEvent.VK_H:
 				SceneDirector.getInstance().pushScene(new HighScoreView(SceneDirector.getInstance().getContainer()));

@@ -46,7 +46,7 @@ public class EndScene extends Scene {
 	 * @param aDelegate The Endscreen delegate
 	 */
 	//boolean didWin, int score, int timeLeft, int aHealth, int levelPlayed,EndScreenDelegate aDelegate
-	public EndScene(Container container, GameView gameView, boolean won) {
+	public EndScene(Container container, GameScene gameView, boolean won) {
 		super(container);
 		
 		this.won = won;

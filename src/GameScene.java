@@ -28,7 +28,7 @@ import core.SoundStore;
  * @version 1.0 12/03/2010
  */
 
-public class GameView extends Scene implements MovingSpriteDelegate, BombDelegate, FireDelegate, HeuristicDelegate {
+public class GameScene extends Scene implements MovingSpriteDelegate, BombDelegate, FireDelegate, HeuristicDelegate {
 	private static final int DEFAULT_SCORE = 0;
 	private static final int DEFAULT_LEVEL = 1;
 	private static final int DEFAULT_HEALTH = 3;
@@ -78,7 +78,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	 * @param aHealth The health to start with
 	 * @param aDelegate The GameViewDelegate object
 	 */
-	public GameView(Container container) {
+	public GameScene(Container container) {
 		this(container, null);
 	}
 	
@@ -94,7 +94,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	 * @param aHealth The health to start with
 	 * @param aDelegate The GameViewDelegate object
 	 */
-	public GameView(Container container, String[] stringArray) {
+	public GameScene(Container container, String[] stringArray) {
 		super(container);
 		
 		score = DEFAULT_SCORE;
