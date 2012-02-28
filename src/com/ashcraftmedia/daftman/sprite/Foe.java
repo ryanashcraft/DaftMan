@@ -20,9 +20,6 @@ import com.ashcraftmedia.daftman.search.Path;
 import com.ashcraftmedia.daftman.search.State;
 import com.ashcraftmedia.daftman.tile.Tile;
 
-
-
-
 /**
  * HW10: DAFTMAN
  * I worked on this assignment alone, using course materials, previous work,
@@ -38,13 +35,12 @@ import com.ashcraftmedia.daftman.tile.Tile;
 public class Foe extends MovingSprite {
 	private final static double STEP_SPEED_MULTIPLIER = 0.1;
 
-	private static final int MAX_DOUBT = SceneDirector.get().secondsToCycles(2);
-
 	private HeuristicDelegate heuristicDelegate;
 	private Random rand;
 	
 	private Path path;
-	private int doubt;
+	private int persistence;
+	private int maxPersistence;
 	
 	/**
 	 * Constructor for Foe objects. Chains to MovingSprite's constructor.
@@ -57,7 +53,7 @@ public class Foe extends MovingSprite {
 		this.heuristicDelegate = heuristicDelegate;
 		
 		rand = new Random();
-		doubt = MAX_DOUBT;
+		persistence = 0;
 	}
 	
 	/**
@@ -127,17 +123,16 @@ public class Foe extends MovingSprite {
 
 		boolean seesBro = delegate.canSeeBro(this);
 		if (seesBro) {
-			doubt = 0;
+			persistence = maxPersistence;
 		}
 		
-		if (seesBro && delegate.shouldChangeDirection(this) || doubt < MAX_DOUBT && delegate.shouldChangeDirection(this)) {
+		if (seesBro && delegate.shouldChangeDirection(this) || persistence > 0 && delegate.shouldChangeDirection(this)) {
 			path = aStarSearch();
 		}
 		
-		if (path != null && (seesBro || doubt++ < MAX_DOUBT)) {
+		if (path != null && (seesBro || persistence-- > 0)) {
 			move(path.getPathway().get(1).getDirection());
-		} else if (path != null ||
-				delegate.shouldChangeDirection(this) && rand.nextInt(100) < 5 || getDirection() == SpriteDirection.STOP) {
+		} else if (path != null || delegate.shouldChangeDirection(this) && rand.nextInt(100) < 5 || getDirection() == SpriteDirection.STOP) {
 			path = null;
 			
 			State s = new State(delegate.tileForPoint(getCenter()));
@@ -200,5 +195,9 @@ public class Foe extends MovingSprite {
 		}
 		
 		return null;
+	}
+
+	public void setMaxPersistence(int maxPersistence) {
+		this.maxPersistence = maxPersistence;
 	}
 }

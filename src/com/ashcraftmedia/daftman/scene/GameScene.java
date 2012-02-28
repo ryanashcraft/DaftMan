@@ -66,7 +66,9 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	private static final int NUMBER_OF_STARS = 2;
 	
 	private static final int BASE_NUMBER_OF_FOES = 2;
-	private static final int ADD_NUMBER_OF_FOES_PER_LEVEL = 2;
+	private static final int ADD_NUMBER_OF_FOES_PER_LEVEL = 1;
+	private static final int BASE_FOE_PERSISTENCE = SceneDirector.get().secondsToCycles(2);
+	private static final int ADD_FOE_PERSISTENCE = SceneDirector.get().secondsToCycles(1);
 
 	private Bro bro;
 	private ArrayList<Foe> foes = new ArrayList<Foe>();
@@ -181,7 +183,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		
 		bro.setLoc(tiles[1][1].getLoc());
 		
-		int foesToAdd = BASE_NUMBER_OF_FOES + (level-1)*ADD_NUMBER_OF_FOES_PER_LEVEL;
+		int foesToAdd = BASE_NUMBER_OF_FOES + (level - 1) * ADD_NUMBER_OF_FOES_PER_LEVEL;
 		if (DaftMan.DEBUG) {
 			foesToAdd = 0;
 		}
@@ -197,6 +199,9 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 				attempts++;
 			}
 			aFoe.setLoc(aTile.getLoc());
+			
+			aFoe.setMaxPersistence(BASE_FOE_PERSISTENCE + (level - 1) * ADD_FOE_PERSISTENCE);
+			
 			foes.add(aFoe);
 		}
 	}
@@ -347,6 +352,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		if (DaftMan.DEBUG) {
 			Foe newFoe = new Foe(this, this);
 			newFoe.setLoc(tileForPoint(new Point(e.getPoint().x - OFFSET_X, e.getPoint().y - SCOREBOARD_HEIGHT - OFFSET_Y)).getLoc());
+			newFoe.setMaxPersistence(BASE_FOE_PERSISTENCE + (level - 1) * ADD_FOE_PERSISTENCE);
 			foes.add(newFoe);
 		}
 	}
