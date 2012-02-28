@@ -158,6 +158,9 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		bro.setLoc(tiles[1][1].getLoc());
 		
 		int foesToAdd = BASE_NUMBER_OF_FOES + (level-1)*ADD_NUMBER_OF_FOES_PER_LEVEL;
+		if (Game.DEBUG) {
+			foesToAdd = 0;
+		}
 		for (int i = 0; i < foesToAdd; i++) {
 			Foe aFoe = new Foe(this, this);
 			Tile aTile = null;
@@ -235,7 +238,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			for (int c = 0; c < tiles[r].length; c++) {
 				tiles[r][c].draw(g);
 				
-				if (Game.DEBUG && !isTileSafe(tiles[r][c]) && !tiles[r][c].isImpassable()) {
+				if (Game.DEBUG && !isTileSafe(tiles[r][c])) {
 					g.setColor(Color.pink);
 					g.fillRect(tiles[r][c].getCol() * Tile.size.width, tiles[r][c].getRow() * Tile.size.height, Tile.size.width, Tile.size.height);
 				}
@@ -351,7 +354,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			fires.get(i).act();
 		}
 		
-		if (getCycleCount() != 0 && getCycleCount() % SceneDirector.getInstance().secondsToCycles(1) == 0) {
+		if (!Game.DEBUG && getCycleCount() != 0 && getCycleCount() % SceneDirector.getInstance().secondsToCycles(1) == 0) {
 			timeLeft--;
 		}
 		
@@ -998,19 +1001,54 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	}
 	
 	public boolean isTileSafe(Tile tile) {
+		if (tile.isImpassable()) {
+			return true;
+		}
+		
 		for (Fire fire : fires) {
 			if (tileForPoint(fire.getCenter()) == tile) {
 				return false;
 			}
 		}
-		
+				
 		if (bomb != null) {
+			// in same column
 			if (tile.getCenter().x == bomb.getCenter().x) {
 				if (Math.abs(tile.getRow() - tileForPoint(bomb.getCenter()).getRow()) < MAX_BOMB_DISTANCE) {
+					int bombRow = tileForPoint(bomb.getCenter()).getRow() + 1;
+					if (tile.getRow() < bombRow) {
+						for (int r = bombRow; r > tile.getRow(); --r) {
+							if (tiles[r][tile.getCol()+1].isImpassable()) {
+								return true;
+							}
+						}
+					} else if (tile.getRow() > bombRow) {
+						for (int r = bombRow; r <= tile.getRow(); r++) {
+							if (tiles[r][tile.getCol()+1].isImpassable()) {
+								return true;
+							}
+						}
+					}
+					
 					return false;
 				}
 			} else if (tile.getCenter().y == bomb.getCenter().y) {
 				if (Math.abs(tile.getCol() - tileForPoint(bomb.getCenter()).getCol()) < MAX_BOMB_DISTANCE) {
+					int bombCol = tileForPoint(bomb.getCenter()).getCol() + 1;
+					if (tile.getCol() < bombCol) {
+						for (int c = bombCol; c > tile.getCol(); --c) {
+							if (tiles[tile.getRow()+1][c].isImpassable()) {
+								return true;
+							}
+						}
+					} else if (tile.getCol() > bombCol) {
+						for (int c = bombCol; c <= tile.getCol(); c++) {
+							if (tiles[tile.getRow()+1][c].isImpassable()) {
+								return true;
+							}
+						}
+					}
+					
 					return false;
 				}
 			}

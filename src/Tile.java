@@ -89,6 +89,6 @@ public abstract class Tile {
 	}
 	
 	public String toString() {
-		return "Tile @ ("+col+", "+row+")";
+		return "Tile @ ("+row+", "+col+")";
 	}
 }
