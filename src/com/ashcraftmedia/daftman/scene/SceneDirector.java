@@ -53,8 +53,8 @@ public class SceneDirector extends JComponent implements ActionListener, KeyList
 		return container;
 	}
 	
-	public int secondsToCycles(int seconds) {
-		return seconds * 1000 / UPDATE_DELAY;
+	public int secondsToCycles(float seconds) {
+		return (int) Math.ceil(seconds * 1000 / UPDATE_DELAY);
 	}
 	
 	public void pushScene(Scene newScene) {		

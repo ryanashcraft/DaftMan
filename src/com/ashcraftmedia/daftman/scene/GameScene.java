@@ -68,7 +68,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	private static final int BASE_NUMBER_OF_FOES = 2;
 	private static final int ADD_NUMBER_OF_FOES_PER_LEVEL = 1;
 	private static final int BASE_FOE_PERSISTENCE = SceneDirector.get().secondsToCycles(2);
-	private static final int ADD_FOE_PERSISTENCE = SceneDirector.get().secondsToCycles(1);
+	private static final int ADD_FOE_PERSISTENCE = SceneDirector.get().secondsToCycles(0.5f);
 
 	private Bro bro;
 	private ArrayList<Foe> foes = new ArrayList<Foe>();
@@ -201,6 +201,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			aFoe.setLoc(aTile.getLoc());
 			
 			aFoe.setMaxPersistence(BASE_FOE_PERSISTENCE + (level - 1) * ADD_FOE_PERSISTENCE);
+			System.out.println(BASE_FOE_PERSISTENCE + (level - 1) * ADD_FOE_PERSISTENCE);
 			
 			foes.add(aFoe);
 		}
