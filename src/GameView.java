@@ -287,6 +287,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			case KeyEvent.VK_SPACE: placeBomb(); break;
 			case KeyEvent.VK_C: if (Game.DEBUG) { cheat(); } break;
 			case KeyEvent.VK_M: SoundStore.get().mute(); break;
+			case KeyEvent.VK_Q: SceneDirector.getInstance().popToRootScene(); break;
 		}
 	}
 
