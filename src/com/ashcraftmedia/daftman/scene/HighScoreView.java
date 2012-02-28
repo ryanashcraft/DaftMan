@@ -97,7 +97,7 @@ public class HighScoreView extends Scene {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_H:
-				SceneDirector.getInstance().popScene();
+				SceneDirector.get().popScene();
 				break;
 			case KeyEvent.VK_M:
 				SoundStore.get().mute();

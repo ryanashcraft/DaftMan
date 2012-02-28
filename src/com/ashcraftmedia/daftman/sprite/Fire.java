@@ -53,7 +53,7 @@ public class Fire extends Sprite {
 	public void act() {	
 		stepCount++;
 		
-		if (SceneDirector.getInstance().secondsToCycles(1) == stepCount) {
+		if (SceneDirector.get().secondsToCycles(1) == stepCount) {
 			delegate.stopFire(this);
 		}
 	}

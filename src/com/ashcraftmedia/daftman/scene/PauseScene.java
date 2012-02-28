@@ -38,7 +38,7 @@ public class PauseScene extends Scene {
 		super.keyPressed(e);
 		
 		switch (e.getKeyCode()) {
-			case KeyEvent.VK_P: SceneDirector.getInstance().popScene(); break;
+			case KeyEvent.VK_P: SceneDirector.get().popScene(); break;
 		}
 	}
 }

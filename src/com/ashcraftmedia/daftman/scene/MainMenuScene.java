@@ -138,14 +138,14 @@ public class MainMenuScene extends Scene {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_ENTER:
-				SceneDirector.getInstance().pushScene(new GameScene(SceneDirector.getInstance().getContainer()));
+				SceneDirector.get().pushScene(new GameScene(SceneDirector.get().getContainer()));
 				break;
 			case KeyEvent.VK_O:
 				String[] level = LevelReader.readLevelFile();
-				SceneDirector.getInstance().pushScene(new GameScene(SceneDirector.getInstance().getContainer(), level));
+				SceneDirector.get().pushScene(new GameScene(SceneDirector.get().getContainer(), level));
 				break;
 			case KeyEvent.VK_H:
-				SceneDirector.getInstance().pushScene(new HighScoreView(SceneDirector.getInstance().getContainer()));
+				SceneDirector.get().pushScene(new HighScoreView(SceneDirector.get().getContainer()));
 				break;
 			case KeyEvent.VK_M:
 				SoundStore.get().mute();
@@ -182,13 +182,13 @@ public class MainMenuScene extends Scene {
 	 * @param stepCount The times the timer has fired
 	 */
 	public void setLogoColor(int stepCount) {
-		if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == 0) {
+		if (stepCount % SceneDirector.get().secondsToCycles(4) == 0) {
 			logo.setForeground(red);
-		} else if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == SceneDirector.getInstance().secondsToCycles(1)) {
+		} else if (stepCount % SceneDirector.get().secondsToCycles(4) == SceneDirector.get().secondsToCycles(1)) {
 			logo.setForeground(green);
-		} else if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == SceneDirector.getInstance().secondsToCycles(2)) {
+		} else if (stepCount % SceneDirector.get().secondsToCycles(4) == SceneDirector.get().secondsToCycles(2)) {
 			logo.setForeground(blue);
-		} else if (stepCount % SceneDirector.getInstance().secondsToCycles(4) == SceneDirector.getInstance().secondsToCycles(3)) {
+		} else if (stepCount % SceneDirector.get().secondsToCycles(4) == SceneDirector.get().secondsToCycles(3)) {
 			logo.setForeground(yellow);
 		}
 		

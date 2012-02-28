@@ -21,7 +21,7 @@ public final class LevelReader {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(new TXTFilter());
 
-		int returnVal = fileChooser.showOpenDialog(SceneDirector.getInstance());
+		int returnVal = fileChooser.showOpenDialog(SceneDirector.get());
 				
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();

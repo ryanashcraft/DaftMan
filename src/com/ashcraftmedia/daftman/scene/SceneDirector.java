@@ -25,7 +25,7 @@ public class SceneDirector extends JComponent implements ActionListener, KeyList
 	private Timer repaintTimer;
 	private Timer updateTimer;
 	
-	public static SceneDirector getInstance() {
+	public static SceneDirector get() {
 		if (instance == null) {
 			instance = new SceneDirector();
 		}

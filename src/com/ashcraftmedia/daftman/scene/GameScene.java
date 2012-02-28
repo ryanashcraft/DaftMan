@@ -316,8 +316,8 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			case KeyEvent.VK_SPACE: placeBomb(); break;
 			case KeyEvent.VK_C: if (DaftMan.DEBUG) { cheat(); } break;
 			case KeyEvent.VK_M: SoundStore.get().mute(); break;
-			case KeyEvent.VK_Q: SceneDirector.getInstance().popToRootScene(); break;
-			case KeyEvent.VK_P: SceneDirector.getInstance().pushScene(new PauseScene(SceneDirector.getInstance().getContainer())); break;
+			case KeyEvent.VK_Q: SceneDirector.get().popToRootScene(); break;
+			case KeyEvent.VK_P: SceneDirector.get().pushScene(new PauseScene(SceneDirector.get().getContainer())); break;
 			case KeyEvent.VK_D:
 				if (e.isShiftDown()) {
 					DaftMan.DEBUG = !DaftMan.DEBUG;
@@ -381,7 +381,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			fires.get(i).act();
 		}
 		
-		if (!DaftMan.DEBUG && getCycleCount() != 0 && getCycleCount() % SceneDirector.getInstance().secondsToCycles(1) == 0) {
+		if (!DaftMan.DEBUG && getCycleCount() != 0 && getCycleCount() % SceneDirector.get().secondsToCycles(1) == 0) {
 			timeLeft--;
 		}
 		
@@ -409,7 +409,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
-					SceneDirector.getInstance().pushScene(new EndScene(SceneDirector.getInstance().getContainer(), this, true));
+					SceneDirector.get().pushScene(new EndScene(SceneDirector.get().getContainer(), this, true));
 
 					return;
 				} else {
@@ -426,7 +426,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
-					SceneDirector.getInstance().pushScene(new EndScene(SceneDirector.getInstance().getContainer(), this, false));
+					SceneDirector.get().pushScene(new EndScene(SceneDirector.get().getContainer(), this, false));
 
 					return;
 				} else {
@@ -437,7 +437,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	}
 	
 	public void cheat() {
-		SceneDirector.getInstance().pushScene(new EndScene(SceneDirector.getInstance().getContainer(), this, true));
+		SceneDirector.get().pushScene(new EndScene(SceneDirector.get().getContainer(), this, true));
 	}
 	
 	public void resume(Scene lastScene) {
@@ -800,7 +800,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 				
 				if (foeRect.intersects(spriteRect)) {
 					hurt(sprite);
-					aFoe.setPauseTime(SceneDirector.getInstance().secondsToCycles(1));
+					aFoe.setPauseTime(SceneDirector.get().secondsToCycles(1));
 					return;
 				}
 			}

@@ -187,7 +187,7 @@ public abstract class MovingSprite extends Sprite {
 	public void hurt() {
 		if (immunity <= 0) {
 			health--;
-			immunity = SceneDirector.getInstance().secondsToCycles(1);
+			immunity = SceneDirector.get().secondsToCycles(1);
 		}
 	}
 

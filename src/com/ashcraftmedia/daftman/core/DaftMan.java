@@ -57,13 +57,13 @@ public class DaftMan extends JApplet {
 	 * Initializes the applet.
 	 */
 	public void init() {
-		setSize(SceneDirector.getInstance().getContainer().getDimension());
+		setSize(SceneDirector.get().getContainer().getDimension());
 		
 		prepareResources();
 		
-		SceneDirector.getInstance().pushScene(new MainMenuScene(SceneDirector.getInstance().getContainer()));
+		SceneDirector.get().pushScene(new MainMenuScene(SceneDirector.get().getContainer()));
 		
-		add(SceneDirector.getInstance());
+		add(SceneDirector.get());
 	}
 	
 	/**

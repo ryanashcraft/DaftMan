@@ -38,7 +38,7 @@ import com.ashcraftmedia.daftman.tile.Tile;
 public class Foe extends MovingSprite {
 	private final static double STEP_SPEED_MULTIPLIER = 0.1;
 
-	private static final int MAX_DOUBT = SceneDirector.getInstance().secondsToCycles(2);
+	private static final int MAX_DOUBT = SceneDirector.get().secondsToCycles(2);
 
 	private HeuristicDelegate heuristicDelegate;
 	private Random rand;

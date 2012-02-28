@@ -170,8 +170,8 @@ public class EndScene extends Scene {
 			SoundStore.get().playSound("STRONGER", 0, 160.0f, false);
 		}
 		
-		if (won && getCycleCount() % SceneDirector.getInstance().secondsToCycles(10) == 0) {
-			SceneDirector.getInstance().popScene();
+		if (won && getCycleCount() % SceneDirector.get().secondsToCycles(10) == 0) {
+			SceneDirector.get().popScene();
 		}
 	}
 	
@@ -207,7 +207,7 @@ public class EndScene extends Scene {
 		else if (name.length() > 0 && e.getKeyCode() == KeyEvent.VK_ENTER) {
 			HighScoreDataCollector.getInstance().recordScore(totalScore, name.trim());
 			
-			SceneDirector.getInstance().popToRootScene();
+			SceneDirector.get().popToRootScene();
 		}
 		
 		nameLabel.setText(DaftMan.addExtraSpaces(name));
