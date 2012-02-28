@@ -106,7 +106,7 @@ public class Foe extends MovingSprite {
 			return;
 		}
 
-		boolean seesBro = delegate.canSeeBro(this);
+		boolean seesBro = true;//delegate.canSeeBro(this);
 		if (seesBro) {
 			doubt = 0;
 		}

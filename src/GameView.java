@@ -232,6 +232,11 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		for (int r = 0; r < tiles.length; r++) {
 			for (int c = 0; c < tiles[r].length; c++) {
 				tiles[r][c].draw(g);
+				
+				if (!isTileSafe(tiles[r][c])) {
+					g.setColor(Color.pink);
+					g.fillRect(tiles[r][c].getCol() * Tile.size.width, tiles[r][c].getRow() * Tile.size.height, Tile.size.width, Tile.size.height);
+				}
 			}
 		}
 		
@@ -547,7 +552,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		
 		// now check to make sure there is an alternative direction
 		for (int r = Math.max(0, tileRow-1); r <= Math.min(tiles.length-1, tileRow+1); r++) {
-			if (tiles[r][tileCol] != aTile && !tiles[r][tileCol].isImpassable()) {
+			if (tiles[r][tileCol] != aTile && !tiles[r][tileCol].isImpassable() && isTileSafe(tiles[r][tileCol])) {
 				return true;
 			}
 		}
@@ -942,23 +947,23 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 
 	public boolean isGoalState(State currentState) {
 		if (bomb != null) {
-			if (!isTileSafe(tileForPoint(bro.getCenter()))) {				
+			Tile broTile = tileForPoint(bro.getCenter());
+			if (!isTileSafe(broTile)) {
+				System.out.println("Bro is NOT safe!");
 				Tile tile = currentState.getTile();
-				if (isTileSafe(tile)) {
-					for (int r = tile.getRow() - 1; r <= tile.getRow() + 1; r++) {
-						for (int c = tile.getCol() - 1; c <= tile.getCol() + 1; c++) {
+				for (int range = 1; range <= 5; range++) {
+					for (int r = broTile.getRow() - range; r <= broTile.getRow() + range; r++) {
+						for (int c = broTile.getCol() - range; c <= broTile.getCol() + range; c++) {
 							r++;
 							c++;
 							if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[r].length) {
-								if (!isTileSafe(tiles[r][c])) {
+								if (isTileSafe(tiles[r][c]) && tiles[r][c] == tile) {
 									return true;
 								}
 							}
 						}
 					}
 				}
-			} else {
-				return false;
 			}
 		}
 		
@@ -977,11 +982,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		}
 		
 		if (bomb != null) {
-//			double distanceToBomb = euclidieanDistance(bomb.getCenter(), tile.getCenter());
-//			if (distanceToTileDistance(distanceToBomb) <= MAX_BOMB_DISTANCE) {
-//				return false;
-//			}
-			
 			if (tile.getCenter().x == bomb.getCenter().x) {
 				if (Math.abs(tile.getRow() - tileForPoint(bomb.getCenter()).getRow()) < MAX_BOMB_DISTANCE) {
 					return false;

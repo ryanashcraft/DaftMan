@@ -115,7 +115,7 @@ public abstract class MovingSprite extends Sprite {
 		
 		Point newPoint = new Point(loc.x + distanceToMove.x, loc.y + distanceToMove.y);
 		Point autoCorrectedPoint = delegate.autoCorrectedPoint(newPoint, this);
-		if (autoCorrectedPoint.x != loc.x || autoCorrectedPoint.y != loc.y) {
+		if (autoCorrectedPoint.x != loc.x || autoCorrectedPoint.y != loc.y || !delegate.isTileSafe(delegate.tileForPoint(autoCorrectedPoint))) {
 			stepCount++;
 		} else {
 			stopMoving();
@@ -239,6 +239,7 @@ interface MovingSpriteDelegate {
 	 * @return The tile the point is in
 	 */
 	public Tile tileForPoint(Point aPoint);
+	public boolean isTileSafe(Tile tile);
 	public int distanceFromBro(Point point);
 	public boolean canSeeBro(MovingSprite sprite);
 }
