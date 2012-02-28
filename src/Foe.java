@@ -107,7 +107,7 @@ public class Foe extends MovingSprite {
 			doubt = 0;
 		}
 		
-		if (delegate.shouldChangeDirection(this)) {
+		if (seesBro && delegate.shouldChangeDirection(this)) {
 			path = aStarSearch();
 		}
 		
