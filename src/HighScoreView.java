@@ -32,8 +32,9 @@ public class HighScoreView extends Scene {
 	 * @param aDelegate The HighScoreViewDelegate object
 	 */
 	public HighScoreView(Container container) {		
+		super(container);
+		
 		setBackground(Color.BLACK);
-		setSize(container.getDimension());
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		

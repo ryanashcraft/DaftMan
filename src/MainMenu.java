@@ -37,8 +37,9 @@ public class MainMenu extends Scene {
 	 * @param aDelegate The MainMenuDelegate object
 	 */
 	public MainMenu(Container container) {
+		super(container);
+		
 		setBackground(Color.BLACK);
-		setSize(container.getDimension());
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		

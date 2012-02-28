@@ -8,6 +8,10 @@ import javax.swing.JPanel;
 public abstract class Scene extends JPanel implements KeyListener, MouseListener {
 	private int cycleCount = 0;
 	
+	public Scene(Container container) {
+		setSize(container.getDimension());
+	}
+	
 	public int getCycleCount() {
 		return cycleCount;
 	}

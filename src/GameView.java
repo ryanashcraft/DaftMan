@@ -94,7 +94,9 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	 * @param aHealth The health to start with
 	 * @param aDelegate The GameViewDelegate object
 	 */
-	public GameView(Container container, String[] stringArray) {		
+	public GameView(Container container, String[] stringArray) {
+		super(container);
+		
 		score = DEFAULT_SCORE;
 		level = DEFAULT_LEVEL;
 		

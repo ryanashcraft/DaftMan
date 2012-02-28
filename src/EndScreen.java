@@ -48,6 +48,8 @@ public class EndScreen extends Scene {
 	 */
 	//boolean didWin, int score, int timeLeft, int aHealth, int levelPlayed,EndScreenDelegate aDelegate
 	public EndScreen(Container container, GameView gameView, boolean won) {
+		super(container);
+		
 		this.won = won;
 		int score = gameView.getScore();
 		totalScore = score + gameView.getTimeLeft();;
