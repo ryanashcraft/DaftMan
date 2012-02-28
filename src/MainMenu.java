@@ -23,6 +23,7 @@ public class MainMenu extends Scene {
 	private JLabel logo;
 	private JLabel playGameLabel;
 	private JLabel highScoresLabel;
+	private JLabel debugLabel;
 	
 	private static final Color red = new Color(200, 56, 56);
 	private static final Color green = new Color(56, 200, 56);
@@ -58,10 +59,21 @@ public class MainMenu extends Scene {
 		highScoresLabel.setFont(Game.font);
 		add(highScoresLabel);
 		
-		JLabel copyrightLabel = new JLabel(Game.addExtraSpaces("2010 Ryan Ashcraft"));
-		copyrightLabel.setForeground(Color.WHITE);
-		copyrightLabel.setFont(Game.font);
-		add(copyrightLabel);
+		JLabel ryanLabel = new JLabel(Game.addExtraSpaces("2010-2012 Ryan Ashcraft"));
+		ryanLabel.setForeground(Color.WHITE);
+		ryanLabel.setFont(Game.font);
+		add(ryanLabel);
+		
+		JLabel tannerLabel = new JLabel(Game.addExtraSpaces("Tanner Smith"));
+		tannerLabel.setForeground(Color.WHITE);
+		tannerLabel.setFont(Game.font);
+		add(tannerLabel);
+		
+		debugLabel = new JLabel(Game.addExtraSpaces("Debug"));
+		debugLabel.setForeground(Color.WHITE);
+		debugLabel.setFont(Game.font);
+		debugLabel.setVisible(Game.DEBUG);
+		add(debugLabel);
 		
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, logo,
                 0,
@@ -84,12 +96,29 @@ public class MainMenu extends Scene {
                 0,
                 SpringLayout.SOUTH, playGameLabel);
 		
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, copyrightLabel,
+		// tanner
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, tannerLabel,
                 0,
                 SpringLayout.HORIZONTAL_CENTER, this);
-		layout.putConstraint(SpringLayout.SOUTH, copyrightLabel,
+		layout.putConstraint(SpringLayout.SOUTH, tannerLabel,
                 -25,
                 SpringLayout.SOUTH, this);
+		
+		// ryan
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, ryanLabel,
+                0,
+                SpringLayout.HORIZONTAL_CENTER, this);
+		layout.putConstraint(SpringLayout.SOUTH, ryanLabel,
+                -25,
+                SpringLayout.SOUTH, tannerLabel);
+		
+		// debug
+		layout.putConstraint(SpringLayout.WEST, debugLabel,
+                7,
+                SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, debugLabel,
+                0,
+                SpringLayout.NORTH, this);
 	}
 	
 	/**
@@ -116,6 +145,7 @@ public class MainMenu extends Scene {
 			case KeyEvent.VK_D:
 				if (e.isShiftDown()) {
 					Game.DEBUG = !Game.DEBUG;
+					debugLabel.setVisible(Game.DEBUG);
 				}
 				break;
 		}
@@ -134,6 +164,8 @@ public class MainMenu extends Scene {
 		}
 		
 		setLogoColor(getCycleCount());
+		
+		debugLabel.setVisible(Game.DEBUG);
 	}
 	
 	/**

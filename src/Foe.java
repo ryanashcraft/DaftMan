@@ -117,9 +117,26 @@ public class Foe extends MovingSprite {
 		
 		if (path != null && (seesBro || doubt++ < MAX_DOUBT)) {
 			move(path.getPathway().get(1).getDirection());
-		} else if (delegate.shouldChangeDirection(this) && Math.random() * 10 < 1 || direction == SpriteDirection.STOP) {
+		} else if (delegate.shouldChangeDirection(this) && rand.nextInt(100) < 5 || direction == SpriteDirection.STOP) {
 			path = null;
-			move(SpriteDirection.values()[rand.nextInt(SpriteDirection.values().length)]);
+			
+			State s = new State(delegate.tileForPoint(getCenter()));
+			Iterator<State> successors = delegate.getSuccessors(s, this);
+			SpriteDirection direction = SpriteDirection.STOP;
+			while (successors.hasNext()) {
+				if (rand.nextBoolean()) {
+					State successor = successors.next();
+					if (delegate.isTileSafe(successor.getTile())) {
+						direction = successor.getDirection();
+						break;
+					}
+				}
+				if (successors.hasNext()) {
+					successors.next();
+				}
+			}
+			
+			move(direction);
 		} else {
 			path = null;
 		}
