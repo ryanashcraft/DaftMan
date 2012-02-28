@@ -91,4 +91,8 @@ public class Bro extends MovingSprite {
 	public boolean isSpedUp() {
 		return (getMoveDistance() > 1);
 	}
+	
+	public void resetSpeed() {
+		setMoveDistance(1);
+	}
 }

@@ -432,6 +432,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			bomb = null;
 			
 			bro.setImmunity(0);
+			bro.resetSpeed();
 			
 			randomlyFill();
 			
