@@ -75,6 +75,10 @@ public abstract class Tile {
 		return col;
 	}
 	
+	public boolean isAdjacent(Tile t) {
+		return Math.abs(row - t.getRow()) < 1 && Math.abs(col - t.getCol()) < 1;
+	}
+	
 	public boolean equals(Object o) {
 		if (o != null && o instanceof Tile) {
 			Tile other = (Tile)o;

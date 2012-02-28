@@ -29,13 +29,22 @@ import core.SoundStore;
  */
 
 public class GameView extends Scene implements MovingSpriteDelegate, BombDelegate, FireDelegate, HeuristicDelegate {
-	private final int DEFAULT_SCORE = 0;
-	private final int DEFAULT_LEVEL = 1;
-	private final int DEFAULT_HEALTH = 3;
-	private final int HURT_PUNISHMENT_SCORE_VALUE = 0;
-	private final int HURT_FOE_PUNISHMENT_SCORE_VALUE = 5;
-	private final int TIME_TO_WIN = 120;
-	private final int LAST_STEPS = 20;
+	private static final int DEFAULT_SCORE = 0;
+	private static final int DEFAULT_LEVEL = 1;
+	private static final int DEFAULT_HEALTH = 3;
+	private static final int HURT_PUNISHMENT_SCORE_VALUE = 0;
+	private static final int HURT_FOE_PUNISHMENT_SCORE_VALUE = 5;
+	private static final int TIME_TO_WIN = 120;
+	private static final int LAST_STEPS = 20;
+	
+	private static final int BASE_NUMBER_OF_RUPEES = 10;
+	private static final int ADD_NUMBER_OF_RUPEES_PER_LEVEL = 2;
+	private static final int MAX_NUMBER_OF_RUPEES = 30;
+	private static final int NUMBER_OF_HEARTS = 3;
+	private static final int NUMBER_OF_STARS = 2;
+	
+	private static final int BASE_NUMBER_OF_FOES = 2;
+	private static final int ADD_NUMBER_OF_FOES_PER_LEVEL = 2;
 
 	private Bro bro;
 	private ArrayList<Foe> foes = new ArrayList<Foe>();
@@ -126,11 +135,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	public void randomlyFill() {
 		Random ranGen = new Random();
 		
-		final int BASE_NUMBER_OF_RUPEES = 10;
-		final int ADD_NUMBER_OF_RUPEES_PER_LEVEL = 2;
-		final int MAX_NUMBER_OF_RUPEES = 30;
-		final int NUMBER_OF_HEARTS = 3;
-		final int NUMBER_OF_STARS = 2;
 		int rupeesToAdd = Math.min(BASE_NUMBER_OF_RUPEES + (level-1)*ADD_NUMBER_OF_RUPEES_PER_LEVEL, MAX_NUMBER_OF_RUPEES);		
 		for (int i = 0; i < rupeesToAdd + NUMBER_OF_HEARTS + NUMBER_OF_STARS; i++) {
 			int r = -1, c = -1;
@@ -153,8 +157,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		
 		bro.setLoc(tiles[1][1].getLoc());
 		
-		final int BASE_NUMBER_OF_FOES = 2;
-		final int ADD_NUMBER_OF_FOES_PER_LEVEL = 2;
 		int foesToAdd = BASE_NUMBER_OF_FOES + (level-1)*ADD_NUMBER_OF_FOES_PER_LEVEL;
 		for (int i = 0; i < foesToAdd; i++) {
 			Foe aFoe = new Foe(this, this);
@@ -466,39 +468,6 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		return true;
 	}
 	
-	/**
-	 * Returns the successors of a foe at a point.
-	 * 
-	 * @param State
-	 * @param aSprite The moving sprite
-	 * @return Array of points and the directions to get there.
-	 */
-	public Iterator<State> getSuccessors(State state, MovingSprite sprite) {
-		ArrayList<State> successors = new ArrayList<State>();
-		Tile t = state.getTile();
-		Point loc = t.getLoc();
-		
-		for (int i = 0; i < SpriteDirection.values().length; i++) {
-			sprite.move(SpriteDirection.values()[i]);
-			
-			Point newPoint = new Point(loc.x + sprite.distanceToMove.x * sprite.getSize().width, loc.y + sprite.distanceToMove.y * sprite.getSize().height);
-			if (canMoveToPoint(newPoint, sprite)) {
-				Tile tile = tileForPoint(newPoint);
-				if (tile != null) {
-					int cost = 1;
-					
-					if (!isTileSafe(tile)) {
-						cost = Integer.MAX_VALUE;
-						continue;
-					}
-					
-					successors.add(new State(tile, SpriteDirection.values()[i], cost));
-				}
-			}
-		}
-		return successors.iterator();
-	}
-	
 	public static double euclidieanDistance(Point a, Point b) {
 		return Math.sqrt(Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2));
 	}
@@ -558,7 +527,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		}
 		
 		for (int c = Math.max(0, tileCol-1); c <= Math.min(tiles[tiles.length-1].length, tileCol+1); c++) {
-			if (tiles[tileRow][c] != aTile && !tiles[tileRow][c].isImpassable()) {
+			if (tiles[tileRow][c] != aTile && !tiles[tileRow][c].isImpassable() && isTileSafe(tiles[tileRow][c])) {
 				return true;
 			}
 		}
@@ -945,29 +914,75 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		return true;
 	}
 
+	/**
+	 * Returns the successors of a foe at a point.
+	 * 
+	 * @param State
+	 * @param aSprite The moving sprite
+	 * @return Array of points and the directions to get there.
+	 */
+	public Iterator<State> getSuccessors(State state, MovingSprite sprite) {
+		ArrayList<State> successors = new ArrayList<State>();
+		Tile t = state.getTile();
+		Point loc = t.getLoc();
+		
+		for (int i = 0; i < SpriteDirection.values().length; i++) {
+			sprite.move(SpriteDirection.values()[i]);
+			
+			Point newPoint = new Point(loc.x + sprite.distanceToMove.x * sprite.getSize().width, loc.y + sprite.distanceToMove.y * sprite.getSize().height);
+			if (canMoveToPoint(newPoint, sprite)) {
+				Tile tile = tileForPoint(newPoint);
+				if (tile != null) {
+					int cost = 1;
+					
+					if (!isTileSafe(tile)) {
+						cost = Integer.MAX_VALUE;
+					}
+					
+					successors.add(new State(tile, SpriteDirection.values()[i], cost));
+				}
+			}
+		}
+		return successors.iterator();
+	}
+
 	public boolean isGoalState(State currentState) {
 		if (bomb != null) {
 			Tile broTile = tileForPoint(bro.getCenter());
 			if (!isTileSafe(broTile)) {
 				System.out.println("Bro is NOT safe!");
-				Tile tile = currentState.getTile();
-				for (int range = 1; range <= 5; range++) {
-					for (int r = broTile.getRow() - range; r <= broTile.getRow() + range; r++) {
-						for (int c = broTile.getCol() - range; c <= broTile.getCol() + range; c++) {
-							r++;
-							c++;
-							if (r >= 0 && r < tiles.length && c >= 0 && c < tiles[r].length) {
-								if (isTileSafe(tiles[r][c]) && tiles[r][c] == tile) {
-									return true;
-								}
-							}
-						}
+				Iterator<Tile> adjacentTiles = adjacentTiles(currentState.getTile());
+				while (adjacentTiles.hasNext()) {
+					if (!isTileSafe(adjacentTiles.next())) {
+						return true;
 					}
 				}
 			}
 		}
 		
 		return currentState.getTile().equals(tileForPoint(bro.getCenter()));
+	}
+	
+	public Iterator<Tile> adjacentTiles(Tile aTile) {
+		int tileRow = aTile.getRow() + 1;
+		int tileCol = aTile.getCol() + 1;
+		
+		ArrayList<Tile> adjacentTiles = new ArrayList<Tile>();
+		
+		// now check to make sure there is an alternative direction
+		for (int r = Math.max(0, tileRow-1); r <= Math.min(tiles.length-1, tileRow+1); r++) {
+			if (tiles[r][tileCol] != aTile && !tiles[r][tileCol].isImpassable()) {
+				adjacentTiles.add(tiles[r][tileCol]);
+			}
+		}
+		
+		for (int c = Math.max(0, tileCol-1); c <= Math.min(tiles[tiles.length-1].length, tileCol+1); c++) {
+			if (tiles[tileRow][c] != aTile && !tiles[tileRow][c].isImpassable()) {
+				adjacentTiles.add(tiles[tileRow][c]);
+			}
+		}
+		
+		return adjacentTiles.iterator();
 	}
 	
 	public double distanceToTileDistance(double distance) {
