@@ -41,6 +41,8 @@ public class Game extends JApplet {
 	public static Font h2;
 	public static Font font;
 	
+	public static boolean DEBUG;
+	
 	/**
 	 * Initializes the applet.
 	 */

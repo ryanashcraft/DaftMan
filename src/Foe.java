@@ -25,7 +25,7 @@ import core.ImageStore;
  */
 
 public class Foe extends MovingSprite {
-	final static double STEP_SPEED_MULTIPLIER = 0.1;
+	private final static double STEP_SPEED_MULTIPLIER = 0.1;
 
 	private static final int MAX_DOUBT = SceneDirector.getInstance().secondsToCycles(2);
 
@@ -72,7 +72,7 @@ public class Foe extends MovingSprite {
 			imageArr = ImageStore.get().getAnimation("FOE_RIGHT");
 		}
 		
-		if (path != null) {
+		if (Game.DEBUG && path != null) {
 			ArrayList<State> states = path.getPathway();
 			Point point = null;
 			

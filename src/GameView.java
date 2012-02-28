@@ -235,7 +235,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			for (int c = 0; c < tiles[r].length; c++) {
 				tiles[r][c].draw(g);
 				
-				if (!isTileSafe(tiles[r][c])) {
+				if (Game.DEBUG && !isTileSafe(tiles[r][c])) {
 					g.setColor(Color.pink);
 					g.fillRect(tiles[r][c].getCol() * Tile.size.width, tiles[r][c].getRow() * Tile.size.height, Tile.size.width, Tile.size.height);
 				}
@@ -285,7 +285,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			case KeyEvent.VK_LEFT: bro.moveLeft(); break;
 			case KeyEvent.VK_RIGHT: bro.moveRight(); break;
 			case KeyEvent.VK_SPACE: placeBomb(); break;
-			case KeyEvent.VK_C: cheat(); break;
+			case KeyEvent.VK_C: if (Game.DEBUG) { cheat(); } break;
 			case KeyEvent.VK_M: SoundStore.get().mute(); break;
 		}
 	}
@@ -310,9 +310,11 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased(e);
 		
-		Foe newFoe = new Foe(this, this);
-		newFoe.setLoc(tileForPoint(new Point(e.getPoint().x - OFFSET_X, e.getPoint().y - SCOREBOARD_HEIGHT - OFFSET_Y)).getLoc());
-		foes.add(newFoe);
+		if (Game.DEBUG) {
+			Foe newFoe = new Foe(this, this);
+			newFoe.setLoc(tileForPoint(new Point(e.getPoint().x - OFFSET_X, e.getPoint().y - SCOREBOARD_HEIGHT - OFFSET_Y)).getLoc());
+			foes.add(newFoe);
+		}
 	}
 	
 	/**

@@ -113,6 +113,11 @@ public class MainMenu extends Scene {
 			case KeyEvent.VK_M:
 				SoundStore.get().mute();
 				break;
+			case KeyEvent.VK_D:
+				if (e.isShiftDown()) {
+					Game.DEBUG = !Game.DEBUG;
+				}
+				break;
 		}
 	}
 
