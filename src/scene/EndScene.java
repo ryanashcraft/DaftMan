@@ -9,7 +9,7 @@ import javax.swing.SpringLayout;
 import util.HighScoreDataCollector;
 
 import core.Container;
-import core.Game;
+import core.DaftMan;
 import core.SoundStore;
 
 
@@ -68,50 +68,50 @@ public class EndScene extends Scene {
 		
 		String str;
 		if (won) {
-			str = Game.addExtraSpaces(String.format("Completed Level %02d", lastLevelPlayed));
+			str = DaftMan.addExtraSpaces(String.format("Completed Level %02d", lastLevelPlayed));
 		} else {
-			str = Game.addExtraSpaces("Game Over!");
+			str = DaftMan.addExtraSpaces("Game Over!");
 		}
 		
 		wonLabel = new JLabel(str);
 		wonLabel.setHorizontalAlignment(JLabel.CENTER);
-		wonLabel.setFont(Game.font);
+		wonLabel.setFont(DaftMan.font);
 		wonLabel.setForeground(Color.WHITE);
 		add(wonLabel);
 	
 		scoreLabel = new JLabel("Score    " + score);
 		scoreLabel.setHorizontalAlignment(JLabel.CENTER);
-		scoreLabel.setFont(Game.font);
+		scoreLabel.setFont(DaftMan.font);
 		scoreLabel.setForeground(Color.WHITE);
 		add(scoreLabel);
 		
 		if (won) {
-			bonusLabel = new JLabel(Game.addExtraSpaces("Time Bonus " + gameView.getTimeLeft()));
+			bonusLabel = new JLabel(DaftMan.addExtraSpaces("Time Bonus " + gameView.getTimeLeft()));
 			bonusLabel.setHorizontalAlignment(JLabel.CENTER);
-			bonusLabel.setFont(Game.font);
+			bonusLabel.setFont(DaftMan.font);
 			bonusLabel.setForeground(Color.WHITE);
 			add(bonusLabel);
 		
-			totalScoreLabel = new JLabel(Game.addExtraSpaces("Total " + totalScore));
+			totalScoreLabel = new JLabel(DaftMan.addExtraSpaces("Total " + totalScore));
 			totalScoreLabel.setHorizontalAlignment(JLabel.CENTER);
-			totalScoreLabel.setFont(Game.font);
+			totalScoreLabel.setFont(DaftMan.font);
 			totalScoreLabel.setForeground(Color.WHITE);
 			add(totalScoreLabel);
 		} else {
-			recordDirectionsLabel = new JLabel(Game.addExtraSpaces("Enter Name And Press Enter"));
+			recordDirectionsLabel = new JLabel(DaftMan.addExtraSpaces("Enter Name And Press Enter"));
 			recordDirectionsLabel.setHorizontalAlignment(JLabel.CENTER);
-			recordDirectionsLabel.setFont(Game.font);
+			recordDirectionsLabel.setFont(DaftMan.font);
 			recordDirectionsLabel.setForeground(Color.WHITE);
 			add(recordDirectionsLabel);
 			
 			nameLabel = new JLabel();
 			nameLabel.setHorizontalAlignment(JLabel.CENTER);
-			nameLabel.setFont(Game.font);
+			nameLabel.setFont(DaftMan.font);
 			nameLabel.setForeground(Color.WHITE);
 			add(nameLabel);
 		}
 		
-		int startingOffset = -(int)Game.font.getSize2D()*2;
+		int startingOffset = -(int)DaftMan.font.getSize2D()*2;
 		
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, wonLabel,
                 0,
@@ -209,6 +209,6 @@ public class EndScene extends Scene {
 			SceneDirector.getInstance().popToRootScene();
 		}
 		
-		nameLabel.setText(Game.addExtraSpaces(name));
+		nameLabel.setText(DaftMan.addExtraSpaces(name));
 	}
 }

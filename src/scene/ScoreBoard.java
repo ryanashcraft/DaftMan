@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 
-import core.Game;
+import core.DaftMan;
 import core.ImageStore;
 
 
@@ -57,15 +57,15 @@ public class ScoreBoard {
 		g.fillRect(loc.x, loc.y, size.width, size.height);
 		
 		final int OUTER_MARGIN = 16;
-		FontMetrics fm = g.getFontMetrics(Game.font);
+		FontMetrics fm = g.getFontMetrics(DaftMan.font);
 		
-		g.setFont(Game.font);
+		g.setFont(DaftMan.font);
 		g.setColor(Color.WHITE);
 		
-		String levelString = Game.addExtraSpaces(String.format("Level %02d", level));
+		String levelString = DaftMan.addExtraSpaces(String.format("Level %02d", level));
 		g.drawString(levelString, loc.x + (size.width - fm.stringWidth(levelString)) / 2, loc.y + OUTER_MARGIN*2);
 
-		String scoreString = Game.addExtraSpaces(String.format("Score %02d", score));
+		String scoreString = DaftMan.addExtraSpaces(String.format("Score %02d", score));
 		g.drawString(scoreString, loc.x + OUTER_MARGIN, loc.y + OUTER_MARGIN*2);
 								
 		for (int i = 0; i < health; i++) {
@@ -76,10 +76,10 @@ public class ScoreBoard {
 					null);
 		}
 		
-		String timeString = Game.addExtraSpaces(String.format("Time %02d", seconds));
+		String timeString = DaftMan.addExtraSpaces(String.format("Time %02d", seconds));
 		g.drawString(timeString, size.width + loc.x*2 - OUTER_MARGIN - fm.stringWidth(timeString), loc.y + OUTER_MARGIN*2);
 
-		String rupeesLeftString = Game.addExtraSpaces(String.format("Rupees %02d", rupeesLeft));
+		String rupeesLeftString = DaftMan.addExtraSpaces(String.format("Rupees %02d", rupeesLeft));
 		g.drawString(rupeesLeftString, size.width + loc.x*2 - OUTER_MARGIN - fm.stringWidth(rupeesLeftString), loc.y + OUTER_MARGIN*2 + fm.getHeight());
 	}
 	

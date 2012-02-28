@@ -34,7 +34,7 @@ import tile.Tile;
 import tile.Wall;
 
 import core.Container;
-import core.Game;
+import core.DaftMan;
 import core.SoundStore;
 
 /**
@@ -183,7 +183,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		bro.setLoc(tiles[1][1].getLoc());
 		
 		int foesToAdd = BASE_NUMBER_OF_FOES + (level-1)*ADD_NUMBER_OF_FOES_PER_LEVEL;
-		if (Game.DEBUG) {
+		if (DaftMan.DEBUG) {
 			foesToAdd = 0;
 		}
 		for (int i = 0; i < foesToAdd; i++) {
@@ -263,7 +263,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			for (int c = 0; c < tiles[r].length; c++) {
 				tiles[r][c].draw(g);
 				
-				if (Game.DEBUG && !isTileSafe(tiles[r][c])) {
+				if (DaftMan.DEBUG && !isTileSafe(tiles[r][c])) {
 					g.setColor(Color.pink);
 					g.fillRect(tiles[r][c].getCol() * Tile.size.width, tiles[r][c].getRow() * Tile.size.height, Tile.size.width, Tile.size.height);
 				}
@@ -313,13 +313,13 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			case KeyEvent.VK_LEFT: bro.moveLeft(); break;
 			case KeyEvent.VK_RIGHT: bro.moveRight(); break;
 			case KeyEvent.VK_SPACE: placeBomb(); break;
-			case KeyEvent.VK_C: if (Game.DEBUG) { cheat(); } break;
+			case KeyEvent.VK_C: if (DaftMan.DEBUG) { cheat(); } break;
 			case KeyEvent.VK_M: SoundStore.get().mute(); break;
 			case KeyEvent.VK_Q: SceneDirector.getInstance().popToRootScene(); break;
 			case KeyEvent.VK_P: SceneDirector.getInstance().pushScene(new PauseScene(SceneDirector.getInstance().getContainer())); break;
 			case KeyEvent.VK_D:
 				if (e.isShiftDown()) {
-					Game.DEBUG = !Game.DEBUG;
+					DaftMan.DEBUG = !DaftMan.DEBUG;
 				}
 				break;
 		}
@@ -345,7 +345,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased(e);
 		
-		if (Game.DEBUG) {
+		if (DaftMan.DEBUG) {
 			Foe newFoe = new Foe(this, this);
 			newFoe.setLoc(tileForPoint(new Point(e.getPoint().x - OFFSET_X, e.getPoint().y - SCOREBOARD_HEIGHT - OFFSET_Y)).getLoc());
 			foes.add(newFoe);
@@ -380,7 +380,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			fires.get(i).act();
 		}
 		
-		if (!Game.DEBUG && getCycleCount() != 0 && getCycleCount() % SceneDirector.getInstance().secondsToCycles(1) == 0) {
+		if (!DaftMan.DEBUG && getCycleCount() != 0 && getCycleCount() % SceneDirector.getInstance().secondsToCycles(1) == 0) {
 			timeLeft--;
 		}
 		

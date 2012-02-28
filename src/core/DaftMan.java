@@ -45,7 +45,7 @@ import util.HighScoreDataCollector;
  * @version 1.0 12/03/2010
  */
 
-public class Game extends JApplet {
+public class DaftMan extends JApplet {
 	public static Font h1;
 	public static Font h2;
 	public static Font font;

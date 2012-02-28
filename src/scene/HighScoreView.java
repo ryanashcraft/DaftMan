@@ -9,7 +9,7 @@ import javax.swing.SpringLayout;
 import util.HighScoreDataCollector;
 
 import core.Container;
-import core.Game;
+import core.DaftMan;
 import core.SoundStore;
 
 
@@ -47,9 +47,9 @@ public class HighScoreView extends Scene {
 		int[] scores = HighScoreDataCollector.getInstance().getRecordScores();
 		String[] holders = HighScoreDataCollector.getInstance().getRecordHolders();
 		
-		titleLabel = new JLabel(Game.addExtraSpaces("High Scores"));
+		titleLabel = new JLabel(DaftMan.addExtraSpaces("High Scores"));
 		titleLabel.setHorizontalAlignment(JLabel.CENTER);
-		titleLabel.setFont(Game.h1);
+		titleLabel.setFont(DaftMan.h1);
 		titleLabel.setForeground(Color.WHITE);
 		add(titleLabel);
 		
@@ -66,9 +66,9 @@ public class HighScoreView extends Scene {
 				continue;
 			}
 			
-			resultLabels[i] = new JLabel(Game.addExtraSpaces(String.format("%s %d", holders[i], scores[i])));
+			resultLabels[i] = new JLabel(DaftMan.addExtraSpaces(String.format("%s %d", holders[i], scores[i])));
 			resultLabels[i].setHorizontalAlignment(JLabel.CENTER);
-			resultLabels[i].setFont(Game.font);
+			resultLabels[i].setFont(DaftMan.font);
 			resultLabels[i].setForeground(Color.WHITE);
 			add(resultLabels[i]);
 			

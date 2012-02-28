@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.SpringLayout;
 
 import core.Container;
-import core.Game;
+import core.DaftMan;
 
 
 public class PauseScene extends Scene {
@@ -22,7 +22,7 @@ public class PauseScene extends Scene {
 		JLabel pauseLabel = new JLabel("Paused");
 		pauseLabel.setHorizontalAlignment(JLabel.CENTER);
 		pauseLabel.setForeground(Color.WHITE);
-		pauseLabel.setFont(Game.font);
+		pauseLabel.setFont(DaftMan.font);
 		add(pauseLabel);
 		
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, pauseLabel,

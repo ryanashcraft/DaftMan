@@ -9,7 +9,7 @@ import javax.swing.*;
 import util.LevelReader;
 
 import core.Container;
-import core.Game;
+import core.DaftMan;
 import core.SoundStore;
 
 
@@ -51,35 +51,35 @@ public class MainMenuScene extends Scene {
 		
 		logo = new JLabel("DAFTMAN");
 		logo.setHorizontalAlignment(JLabel.CENTER);
-		logo.setFont(Game.h1);
+		logo.setFont(DaftMan.h1);
 		setLogoColor(0);
 		add(logo);
 		
-		playGameLabel = new JLabel(Game.addExtraSpaces("Press Enter To Play"));
+		playGameLabel = new JLabel(DaftMan.addExtraSpaces("Press Enter To Play"));
 		playGameLabel.setForeground(Color.WHITE);
-		playGameLabel.setFont(Game.font);
+		playGameLabel.setFont(DaftMan.font);
 		add(playGameLabel);
 		// playGameLabel.addMouseListener(this);
 		
-		highScoresLabel = new JLabel(Game.addExtraSpaces("Press H For High Scores"));
+		highScoresLabel = new JLabel(DaftMan.addExtraSpaces("Press H For High Scores"));
 		highScoresLabel.setForeground(Color.WHITE);
-		highScoresLabel.setFont(Game.font);
+		highScoresLabel.setFont(DaftMan.font);
 		add(highScoresLabel);
 		
-		JLabel ryanLabel = new JLabel(Game.addExtraSpaces("2010-2012 Ryan Ashcraft"));
+		JLabel ryanLabel = new JLabel(DaftMan.addExtraSpaces("2010-2012 Ryan Ashcraft"));
 		ryanLabel.setForeground(Color.WHITE);
-		ryanLabel.setFont(Game.font);
+		ryanLabel.setFont(DaftMan.font);
 		add(ryanLabel);
 		
-		JLabel tannerLabel = new JLabel(Game.addExtraSpaces("Tanner Smith"));
+		JLabel tannerLabel = new JLabel(DaftMan.addExtraSpaces("Tanner Smith"));
 		tannerLabel.setForeground(Color.WHITE);
-		tannerLabel.setFont(Game.font);
+		tannerLabel.setFont(DaftMan.font);
 		add(tannerLabel);
 		
-		debugLabel = new JLabel(Game.addExtraSpaces("Debug"));
+		debugLabel = new JLabel(DaftMan.addExtraSpaces("Debug"));
 		debugLabel.setForeground(Color.WHITE);
-		debugLabel.setFont(Game.font);
-		debugLabel.setVisible(Game.DEBUG);
+		debugLabel.setFont(DaftMan.font);
+		debugLabel.setVisible(DaftMan.DEBUG);
 		add(debugLabel);
 		
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, logo,
@@ -151,8 +151,8 @@ public class MainMenuScene extends Scene {
 				break;
 			case KeyEvent.VK_D:
 				if (e.isShiftDown()) {
-					Game.DEBUG = !Game.DEBUG;
-					debugLabel.setVisible(Game.DEBUG);
+					DaftMan.DEBUG = !DaftMan.DEBUG;
+					debugLabel.setVisible(DaftMan.DEBUG);
 				}
 				break;
 		}
@@ -172,7 +172,7 @@ public class MainMenuScene extends Scene {
 		
 		setLogoColor(getCycleCount());
 		
-		debugLabel.setVisible(Game.DEBUG);
+		debugLabel.setVisible(DaftMan.DEBUG);
 	}
 	
 	/**

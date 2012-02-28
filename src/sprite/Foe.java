@@ -18,7 +18,7 @@ import search.Path;
 import search.State;
 import tile.Tile;
 
-import core.Game;
+import core.DaftMan;
 import core.ImageStore;
 
 
@@ -78,7 +78,7 @@ public class Foe extends MovingSprite {
 			imageArr = ImageStore.get().getAnimation("FOE_RIGHT");
 		}
 		
-		if (Game.DEBUG && path != null) {
+		if (DaftMan.DEBUG && path != null) {
 			ArrayList<State> states = path.getPathway();
 			Point point = null;
 			
