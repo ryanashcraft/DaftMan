@@ -20,7 +20,7 @@ public abstract class Scene extends JPanel implements KeyListener, MouseListener
 		revalidate();
 	}
 	
-	public void resume() {
+	public void resume(Scene lastScene) {
 		revalidate();
 	}
 	

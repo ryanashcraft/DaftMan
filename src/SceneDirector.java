@@ -68,7 +68,7 @@ public class SceneDirector extends JComponent implements ActionListener, KeyList
 			Scene oldScene = scenes.pop();
 			remove(oldScene);
 			add(scenes.peek());
-			scenes.peek().resume();
+			scenes.peek().resume(oldScene);
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class SceneDirector extends JComponent implements ActionListener, KeyList
 		
 		Scene root = scenes.get(0);
 		add(root);
-		root.resume();
+		root.resume(null);
 				
 		scenes.removeAllElements();
 		scenes.add(root);

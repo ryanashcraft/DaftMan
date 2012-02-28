@@ -291,6 +291,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			case KeyEvent.VK_C: if (Game.DEBUG) { cheat(); } break;
 			case KeyEvent.VK_M: SoundStore.get().mute(); break;
 			case KeyEvent.VK_Q: SceneDirector.getInstance().popToRootScene(); break;
+			case KeyEvent.VK_P: SceneDirector.getInstance().pushScene(new PauseScene(SceneDirector.getInstance().getContainer())); break;
 			case KeyEvent.VK_D:
 				if (e.isShiftDown()) {
 					Game.DEBUG = !Game.DEBUG;
@@ -413,23 +414,25 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, true));
 	}
 	
-	public void resume() {
-		super.resume();
+	public void resume(Scene lastScene) {
+		super.resume(lastScene);
 		
-		timeLeft = TIME_TO_WIN;
-		level++;
-		gameOver = false;
-		
-		foes.clear();
-		stars.clear();
-		hearts.clear();
-		fires.clear();
-		rupees.clear();
-		bomb = null;
-		
-		randomlyFill();
-		
-		update();
+		if (lastScene != null && lastScene instanceof EndScreen) {
+			timeLeft = TIME_TO_WIN;
+			level++;
+			gameOver = false;
+			
+			foes.clear();
+			stars.clear();
+			hearts.clear();
+			fires.clear();
+			rupees.clear();
+			bomb = null;
+			
+			randomlyFill();
+			
+			update();
+		}
 	}
 	
 	/**
