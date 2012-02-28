@@ -20,7 +20,7 @@ import core.SoundStore;
  * @version 1.0 12/03/2010
  */
 
-public class EndScreen extends Scene {
+public class EndScene extends Scene {
 	private JLabel wonLabel;
 	private JLabel scoreLabel;
 	private JLabel bonusLabel;
@@ -46,7 +46,7 @@ public class EndScreen extends Scene {
 	 * @param aDelegate The Endscreen delegate
 	 */
 	//boolean didWin, int score, int timeLeft, int aHealth, int levelPlayed,EndScreenDelegate aDelegate
-	public EndScreen(Container container, GameView gameView, boolean won) {
+	public EndScene(Container container, GameView gameView, boolean won) {
 		super(container);
 		
 		this.won = won;

@@ -385,7 +385,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
-					SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, true));
+					SceneDirector.getInstance().pushScene(new EndScene(SceneDirector.getInstance().getContainer(), this, true));
 
 					return;
 				} else {
@@ -402,7 +402,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			
 			if (gameOver) {
 				if (lastStepsLeft <= 0) {
-					SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, false));
+					SceneDirector.getInstance().pushScene(new EndScene(SceneDirector.getInstance().getContainer(), this, false));
 
 					return;
 				} else {
@@ -413,13 +413,13 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 	}
 	
 	public void cheat() {
-		SceneDirector.getInstance().pushScene(new EndScreen(SceneDirector.getInstance().getContainer(), this, true));
+		SceneDirector.getInstance().pushScene(new EndScene(SceneDirector.getInstance().getContainer(), this, true));
 	}
 	
 	public void resume(Scene lastScene) {
 		super.resume(lastScene);
 		
-		if (lastScene != null && lastScene instanceof EndScreen) {
+		if (lastScene != null && lastScene instanceof EndScene) {
 			timeLeft = TIME_TO_WIN;
 			level++;
 			gameOver = false;
