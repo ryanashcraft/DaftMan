@@ -40,6 +40,7 @@ public abstract class MovingSprite extends Sprite {
 		this.moveDistance = moveDistance;
 		
 		distanceToMove = new Point(0, 0);
+		direction = SpriteDirection.STOP;
 	}
 	
 	/**

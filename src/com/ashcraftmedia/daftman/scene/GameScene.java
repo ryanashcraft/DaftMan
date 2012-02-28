@@ -36,8 +36,6 @@ import com.ashcraftmedia.daftman.tile.Grass;
 import com.ashcraftmedia.daftman.tile.Tile;
 import com.ashcraftmedia.daftman.tile.Wall;
 
-
-
 /**
  * HW10: DAFTMAN
  * I worked on this assignment alone, using course materials, previous work,
@@ -545,11 +543,37 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	public boolean shouldChangeDirection(Foe aFoe) {
 		Point foeCenter = aFoe.getCenter();
 		Tile aTile = tileForPoint(foeCenter);
+		
+		if (!isTileSafe(aTile)) {
+			return true;
+		}
+		
+		Tile tileHeadedFor = tileHeadedFor(aFoe);
+		if (tileHeadedFor != null && !isTileSafe(tileHeadedFor(aFoe))) {
+			return true;
+		}
+		
 		if (aTile.getCenter().equals(foeCenter)) {
 			return adjacentTileMoveExists(aTile);
 		}
 		
 		return false;
+	}
+	
+	private Tile tileHeadedFor(MovingSprite sprite) {
+		Tile currentTile = tileForPoint(sprite.getCenter());
+		switch (sprite.getDirection()) {
+			case UP:
+				return tiles[currentTile.getRow() + 1 - 1][currentTile.getCol() + 1];
+			case RIGHT:
+				return tiles[currentTile.getRow() + 1][currentTile.getCol() + 1 + 1];
+			case DOWN:
+				return tiles[currentTile.getRow() + 1 + 1][currentTile.getCol() + 1];
+			case LEFT:
+				return tiles[currentTile.getRow() + 1][currentTile.getCol() + 1 - 1];
+		}
+		
+		return null;
 	}
 	
 	/**

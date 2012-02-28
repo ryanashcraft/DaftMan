@@ -130,13 +130,14 @@ public class Foe extends MovingSprite {
 			doubt = 0;
 		}
 		
-		if (seesBro && delegate.shouldChangeDirection(this)) {
+		if (seesBro && delegate.shouldChangeDirection(this) || doubt < MAX_DOUBT && delegate.shouldChangeDirection(this)) {
 			path = aStarSearch();
 		}
 		
 		if (path != null && (seesBro || doubt++ < MAX_DOUBT)) {
 			move(path.getPathway().get(1).getDirection());
-		} else if (delegate.shouldChangeDirection(this) && rand.nextInt(100) < 5 || getDirection() == SpriteDirection.STOP) {
+		} else if (path != null ||
+				delegate.shouldChangeDirection(this) && rand.nextInt(100) < 5 || getDirection() == SpriteDirection.STOP) {
 			path = null;
 			
 			State s = new State(delegate.tileForPoint(getCenter()));
@@ -155,9 +156,11 @@ public class Foe extends MovingSprite {
 				}
 			}
 			
-			move(direction);
-		} else {
-			path = null;
+			if (direction == SpriteDirection.STOP) {
+				this.stopMoving();
+			} else {
+				move(direction);
+			}
 		}
 		
 		super.act();
