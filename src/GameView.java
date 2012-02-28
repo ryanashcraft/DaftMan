@@ -235,7 +235,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			for (int c = 0; c < tiles[r].length; c++) {
 				tiles[r][c].draw(g);
 				
-				if (Game.DEBUG && !isTileSafe(tiles[r][c])) {
+				if (Game.DEBUG && !isTileSafe(tiles[r][c]) && !tiles[r][c].isImpassable()) {
 					g.setColor(Color.pink);
 					g.fillRect(tiles[r][c].getCol() * Tile.size.width, tiles[r][c].getRow() * Tile.size.height, Tile.size.width, Tile.size.height);
 				}
