@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import javax.sound.midi.Sequencer;
@@ -201,7 +202,6 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			aFoe.setLoc(aTile.getLoc());
 			
 			aFoe.setMaxPersistence(BASE_FOE_PERSISTENCE + (level - 1) * ADD_FOE_PERSISTENCE);
-			System.out.println(BASE_FOE_PERSISTENCE + (level - 1) * ADD_FOE_PERSISTENCE);
 			
 			foes.add(aFoe);
 		}
@@ -969,7 +969,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	 * @param aSprite The moving sprite
 	 * @return Array of points and the directions to get there.
 	 */
-	public Iterator<State> getSuccessors(State state, MovingSprite sprite) {
+	public List<State> getSuccessors(State state, MovingSprite sprite) {
 		ArrayList<State> successors = new ArrayList<State>();
 		Tile t = state.getTile();
 		Point loc = t.getLoc();
@@ -992,7 +992,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			}
 		}
 		
-		return successors.iterator();
+		return successors;
 	}
 
 	public boolean isGoalState(State currentState) {

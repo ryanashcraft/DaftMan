@@ -2,6 +2,7 @@ package com.ashcraftmedia.daftman.sprite;
 
 import java.awt.Point;
 import java.util.Iterator;
+import java.util.List;
 
 import com.ashcraftmedia.daftman.search.State;
 import com.ashcraftmedia.daftman.tile.Tile;
@@ -47,7 +48,7 @@ public interface MovingSpriteDelegate {
 	 * @param aSprite The moving sprite
 	 * @return Array of points and the directions to get there.
 	 */
-	public Iterator<State> getSuccessors(State state, MovingSprite sprite);
+	public List<State> getSuccessors(State state, MovingSprite sprite);
 	/**
 	 * Gets the tile that contains a point.
 	 * 

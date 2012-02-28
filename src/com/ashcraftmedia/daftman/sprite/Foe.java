@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -136,18 +137,13 @@ public class Foe extends MovingSprite {
 			path = null;
 			
 			State s = new State(delegate.tileForPoint(getCenter()));
-			Iterator<State> successors = delegate.getSuccessors(s, this);
+			List<State> successors = delegate.getSuccessors(s, this);
 			SpriteDirection direction = SpriteDirection.STOP;
-			while (successors.hasNext()) {
-				if (rand.nextBoolean()) {
-					State successor = successors.next();
-					if (delegate.isTileSafe(successor.getTile())) {
-						direction = successor.getDirection();
-						break;
-					}
-				}
-				if (successors.hasNext()) {
-					successors.next();
+			State randomSuccessor = null;
+			while (randomSuccessor == null) {
+				randomSuccessor = successors.get(rand.nextInt(successors.size()));
+				if (delegate.isTileSafe(randomSuccessor.getTile())) {
+					direction = randomSuccessor.getDirection();
 				}
 			}
 			
@@ -185,9 +181,8 @@ public class Foe extends MovingSprite {
 					}
 				}
 				
-				Iterator<State> successors = delegate.getSuccessors(currentState, this);
-				while (successors.hasNext()) {
-					State successor = successors.next();
+				List<State> successors = delegate.getSuccessors(currentState, this);
+				for (State successor : successors) {
 					successor.setWeight(successor.getWeight() + heuristicDelegate.heuristicForTile(successor.getTile()));
 					priorityQueue.add(new Path(currentPath, successor));
 				}
