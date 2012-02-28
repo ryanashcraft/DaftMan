@@ -50,15 +50,20 @@ public class ImageStore {
 		addImage("images/heart.png", "HEART");
 		addImage("images/heart-small.png", "SMALL_HEART");
 		
-		addAnimation("images/bro-up-%d.png", "BRO_UP", 3);
-		addAnimation("images/bro-down-%d.png", "BRO_DOWN", 3);
-		addAnimation("images/bro-left-%d.png", "BRO_LEFT", 3);
-		addAnimation("images/bro-right-%d.png", "BRO_RIGHT", 3);
+		addAnimation("images/bro/bro-up-%d.png", "BRO_UP", 3);
+		addAnimation("images/bro/bro-down-%d.png", "BRO_DOWN", 3);
+		addAnimation("images/bro/bro-left-%d.png", "BRO_LEFT", 3);
+		addAnimation("images/bro/bro-right-%d.png", "BRO_RIGHT", 3);
 		
-		addAnimation("images/foe-up-%d.png", "FOE_UP", 3);
-		addAnimation("images/foe-down-%d.png", "FOE_DOWN", 3);
-		addAnimation("images/foe-left-%d.png", "FOE_LEFT", 3);
-		addAnimation("images/foe-right-%d.png", "FOE_RIGHT", 3);
+		addAnimation("images/foe/foe-up-%d.png", "FOE_UP", 3);
+		addAnimation("images/foe/foe-down-%d.png", "FOE_DOWN", 3);
+		addAnimation("images/foe/foe-left-%d.png", "FOE_LEFT", 3);
+		addAnimation("images/foe/foe-right-%d.png", "FOE_RIGHT", 3);
+		
+		addAnimation("images/foe-follow/foe-follow-up-%d.png", "FOE_FOLLOW_UP", 3);
+		addAnimation("images/foe-follow/foe-follow-down-%d.png", "FOE_FOLLOW_DOWN", 3);
+		addAnimation("images/foe-follow/foe-follow-left-%d.png", "FOE_FOLLOW_LEFT", 3);
+		addAnimation("images/foe-follow/foe-follow-right-%d.png", "FOE_FOLLOW_RIGHT", 3);
 		
 		addAnimation("images/bomb-%d.png", "BOMB", 2);
 		

@@ -69,14 +69,26 @@ public class Foe extends MovingSprite {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		Image[] imageArr;
-		if (this.getDirection() == SpriteDirection.UP) {
-			imageArr = ImageStore.get().getAnimation("FOE_UP");
-		} else if (this.getDirection() == SpriteDirection.DOWN) {
-			imageArr = ImageStore.get().getAnimation("FOE_DOWN");
-		} else if (this.getDirection() == SpriteDirection.LEFT) {
-			imageArr = ImageStore.get().getAnimation("FOE_LEFT");
+		if (path == null) {
+			if (this.getDirection() == SpriteDirection.UP) {
+				imageArr = ImageStore.get().getAnimation("FOE_UP");
+			} else if (this.getDirection() == SpriteDirection.DOWN) {
+				imageArr = ImageStore.get().getAnimation("FOE_DOWN");
+			} else if (this.getDirection() == SpriteDirection.LEFT) {
+				imageArr = ImageStore.get().getAnimation("FOE_LEFT");
+			} else {
+				imageArr = ImageStore.get().getAnimation("FOE_RIGHT");
+			}
 		} else {
-			imageArr = ImageStore.get().getAnimation("FOE_RIGHT");
+			if (this.getDirection() == SpriteDirection.UP) {
+				imageArr = ImageStore.get().getAnimation("FOE_FOLLOW_UP");
+			} else if (this.getDirection() == SpriteDirection.DOWN) {
+				imageArr = ImageStore.get().getAnimation("FOE_FOLLOW_DOWN");
+			} else if (this.getDirection() == SpriteDirection.LEFT) {
+				imageArr = ImageStore.get().getAnimation("FOE_FOLLOW_LEFT");
+			} else {
+				imageArr = ImageStore.get().getAnimation("FOE_FOLLOW_RIGHT");
+			}
 		}
 		
 		if (DaftMan.DEBUG && path != null) {
