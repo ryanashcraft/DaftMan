@@ -167,6 +167,7 @@ public class Foe extends MovingSprite {
 				Iterator<State> successors = delegate.getSuccessors(currentState, this);
 				while (successors.hasNext()) {
 					State successor = successors.next();
+					successor.setWeight(successor.getWeight() + heuristicDelegate.heuristicForTile(successor.getTile()));
 					priorityQueue.add(new Path(currentPath, successor));
 				}
 			}
