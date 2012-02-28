@@ -225,4 +225,8 @@ public abstract class MovingSprite extends Sprite {
 	public Point getDistanceToMove() {
 		return distanceToMove;
 	}
+	
+	public void setDirection(SpriteDirection direction) {
+		this.direction = direction;
+	}
 }

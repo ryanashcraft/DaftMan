@@ -456,6 +456,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			
 			bro.setImmunity(0);
 			bro.resetSpeed();
+			bro.setDirection(SpriteDirection.STOP);
 			
 			randomlyFill();
 			
