@@ -431,6 +431,8 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 			rupees.clear();
 			bomb = null;
 			
+			bro.setImmunity(0);
+			
 			randomlyFill();
 			
 			update();
@@ -918,7 +920,7 @@ public class GameView extends Scene implements MovingSpriteDelegate, BombDelegat
 		for (int i = 0; i < SpriteDirection.values().length; i++) {
 			sprite.move(SpriteDirection.values()[i]);
 			
-			Point newPoint = new Point(loc.x + sprite.distanceToMove.x * sprite.getSize().width, loc.y + sprite.distanceToMove.y * sprite.getSize().height);
+			Point newPoint = new Point(loc.x + sprite.getDistanceToMove().x * sprite.getSize().width, loc.y + sprite.getDistanceToMove().y * sprite.getSize().height);
 			if (canMoveToPoint(newPoint, sprite)) {
 				Tile tile = tileForPoint(newPoint);
 				if (tile != null) {

@@ -16,12 +16,12 @@ import java.util.Iterator;
 
 public abstract class MovingSprite extends Sprite {
 	protected MovingSpriteDelegate delegate;
-	protected int moveDistance;
-	protected Point distanceToMove;
-	protected SpriteDirection direction;
+	private int moveDistance;
+	private Point distanceToMove;
+	private SpriteDirection direction;
 	
-	protected int health;
-	protected int immunity;
+	private int health;
+	private int immunity;
 
 	private int pauseTime;
 	
@@ -30,8 +30,11 @@ public abstract class MovingSprite extends Sprite {
 	 * 
 	 * @param aDelegate
 	 */
-	public MovingSprite(MovingSpriteDelegate aDelegate) {
+	public MovingSprite(MovingSpriteDelegate aDelegate, int health, int moveDistance) {
 		delegate = aDelegate;
+		
+		this.health = health;
+		this.moveDistance = moveDistance;
 		
 		distanceToMove = new Point(0, 0);
 	}
@@ -113,6 +116,10 @@ public abstract class MovingSprite extends Sprite {
 			return;
 		}
 		
+		if (getImmunity() > 0) {
+			--immunity;
+		}
+		
 		Point newPoint = new Point(loc.x + distanceToMove.x, loc.y + distanceToMove.y);
 		Point autoCorrectedPoint = delegate.autoCorrectedPoint(newPoint, this);
 		if (autoCorrectedPoint.x != loc.x || autoCorrectedPoint.y != loc.y || !delegate.isTileSafe(delegate.tileForPoint(autoCorrectedPoint))) {
@@ -135,6 +142,22 @@ public abstract class MovingSprite extends Sprite {
 	 */
 	public void stopMoveX() {
 		distanceToMove = new Point(0, distanceToMove.y);
+	}
+	
+	public SpriteDirection getDirection() {
+		return direction;
+	}
+	
+	public int getImmmunity() {
+		return immunity;
+	}
+	
+	public int getMoveDistance() {
+		return moveDistance;
+	}
+	
+	public void setMoveDistance(int moveDistance) {
+		this.moveDistance = moveDistance;
 	}
 	
 	/**
@@ -181,6 +204,15 @@ public abstract class MovingSprite extends Sprite {
 	 */
 	public int getImmunity() {
 		return immunity;
+	}
+	
+	/**
+	 * Sets the immunity
+	 * 
+	 * @param immunity The new immunity
+	 */
+	public void setImmunity(int immunity) {
+		this.immunity = immunity;
 	}
 	
 	/**

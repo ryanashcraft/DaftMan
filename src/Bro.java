@@ -27,10 +27,7 @@ public class Bro extends MovingSprite {
 	 * @param aDelegate The MovingSpriteDelegate object
 	 */
 	public Bro(MovingSpriteDelegate aDelegate) {
-		super(aDelegate);
-		
-		immunity = 0;
-		moveDistance = 1;
+		super(aDelegate, 3, 1);
 	}
 
 	/**
@@ -42,21 +39,21 @@ public class Bro extends MovingSprite {
 	 */
 	public void draw(Graphics g) {
 		Image[] imageArr;
-		if (direction == SpriteDirection.UP) {
+		if (getDirection() == SpriteDirection.UP) {
 			imageArr = ImageStore.get().getAnimation("BRO_UP");
-		} else if (direction == SpriteDirection.DOWN) {
+		} else if (getDirection() == SpriteDirection.DOWN) {
 			imageArr = ImageStore.get().getAnimation("BRO_DOWN");
-		} else if (direction == SpriteDirection.LEFT) {
+		} else if (getDirection() == SpriteDirection.LEFT) {
 			imageArr = ImageStore.get().getAnimation("BRO_LEFT");
 		} else {
 			imageArr = ImageStore.get().getAnimation("BRO_RIGHT");
 		}
 		
-		if (immunity == 0) {
+		if (getImmunity() == 0) {
 			g.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);
 		} else {
 			// flicker image if recently hurt
-			if (immunity % 4 != 0) {
+			if (getImmunity() % 4 != 0) {
 				g.drawImage(imageArr[(int)(stepCount * STEP_SPEED_MULTIPLIER) % 3], loc.x, loc.y, size.width, size.height, null);	
 			}
 		}
@@ -69,15 +66,11 @@ public class Bro extends MovingSprite {
 	public void act() {
 		super.act();
 		
-		if (immunity > 0) {
-			immunity--;
-		}
-		
-		if (moveDistance > 1) {
+		if (getMoveDistance() > 1) {
 			boostSpeedStarStepCount--;
 			
 			if (boostSpeedStarStepCount <= 0) {
-				moveDistance = 1;
+				setMoveDistance(1);
 			}
 		}
 	}
@@ -86,7 +79,7 @@ public class Bro extends MovingSprite {
 	 * Increases speed by doubling the distance moved with each step.
 	 */
 	public void boostSpeed() {
-		moveDistance = 2;
+		setMoveDistance(2);
 		boostSpeedStarStepCount = SceneDirector.getInstance().secondsToCycles(14);
 	}
 	
@@ -96,6 +89,6 @@ public class Bro extends MovingSprite {
 	 * @return Whether is sped up
 	 */
 	public boolean isSpedUp() {
-		return (moveDistance > 1);
+		return (getMoveDistance() > 1);
 	}
 }

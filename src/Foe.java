@@ -41,11 +41,7 @@ public class Foe extends MovingSprite {
 	 * @param aDelegate The MovingSpriteDelegate object
 	 */
 	public Foe(MovingSpriteDelegate aDelegate, HeuristicDelegate heuristicDelegate) {
-		super(aDelegate);
-		
-		health = 1;
-		immunity = 0;
-		moveDistance = 1;
+		super(aDelegate, 1, 1);
 		
 		this.heuristicDelegate = heuristicDelegate;
 		
@@ -62,11 +58,11 @@ public class Foe extends MovingSprite {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		Image[] imageArr;
-		if (direction == SpriteDirection.UP) {
+		if (this.getDirection() == SpriteDirection.UP) {
 			imageArr = ImageStore.get().getAnimation("FOE_UP");
-		} else if (direction == SpriteDirection.DOWN) {
+		} else if (this.getDirection() == SpriteDirection.DOWN) {
 			imageArr = ImageStore.get().getAnimation("FOE_DOWN");
-		} else if (direction == SpriteDirection.LEFT) {
+		} else if (this.getDirection() == SpriteDirection.LEFT) {
 			imageArr = ImageStore.get().getAnimation("FOE_LEFT");
 		} else {
 			imageArr = ImageStore.get().getAnimation("FOE_RIGHT");
@@ -117,7 +113,7 @@ public class Foe extends MovingSprite {
 		
 		if (path != null && (seesBro || doubt++ < MAX_DOUBT)) {
 			move(path.getPathway().get(1).getDirection());
-		} else if (delegate.shouldChangeDirection(this) && rand.nextInt(100) < 5 || direction == SpriteDirection.STOP) {
+		} else if (delegate.shouldChangeDirection(this) && rand.nextInt(100) < 5 || getDirection() == SpriteDirection.STOP) {
 			path = null;
 			
 			State s = new State(delegate.tileForPoint(getCenter()));
