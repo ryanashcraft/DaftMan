@@ -60,14 +60,14 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	private static final int TIME_TO_WIN = 120;
 	private static final int LAST_STEPS = 20;
 	
-	private static final int BASE_NUMBER_OF_RUPEES = 8;
+	private static final int BASE_NUMBER_OF_RUPEES = 10;
 	private static final int ADD_NUMBER_OF_RUPEES_PER_LEVEL = 2;
 	private static final int MAX_NUMBER_OF_RUPEES = 30;
 	private static final int NUMBER_OF_HEARTS = 3;
 	private static final int NUMBER_OF_STARS = 2;
 	
-	private static final int BASE_NUMBER_OF_FOES = 3;
-	private static final int ADD_NUMBER_OF_FOES_PER_LEVEL = 0;
+	private static final int BASE_NUMBER_OF_FOES = 2;
+	private static final int ADD_NUMBER_OF_FOES_PER_LEVEL = 1;
 	private static final int BASE_FOE_PERSISTENCE = SceneDirector.get().secondsToCycles(2);
 	private static final int ADD_FOE_PERSISTENCE = SceneDirector.get().secondsToCycles(0.5f);
 
@@ -668,14 +668,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	public void didExplode() {
 		SoundStore.get().playSound("EXPLODE");
 		
-		Tile tile = tileForPoint(bomb.getCenter());
-		
-		// pause foes that are within a certain distance of the bomb
-		for (Foe foe : foes) {
-			if (euclidieanDistance(foe.getCenter(), bomb.getCenter()) < Tile.size.width * 4) {
-				foe.setPauseTime(SceneDirector.get().secondsToCycles(0.5f));
-			}
-		}
+		Tile tile = tileForPoint(bomb.getCenter()); 
 				
 		// up
 		for (int r = tile.getRow() + 1; r >= 0 && r >= tile.getRow() + 1 - MAX_BOMB_DISTANCE + 1; r--) {
