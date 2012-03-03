@@ -127,7 +127,7 @@ public class Foe extends MovingSprite {
 			persistence = maxPersistence;
 		}
 		
-		if (seesBro && delegate.shouldChangeDirection(this) || persistence > 0 && delegate.shouldChangeDirection(this)) {
+		if (seesBro || persistence > 0) {
 			path = aStarSearch();
 		}
 		
