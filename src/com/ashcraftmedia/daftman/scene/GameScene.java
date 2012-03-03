@@ -1079,13 +1079,13 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 					int bombRow = tileForPoint(bomb.getCenter()).getRow();
 					if (tile.getRow() < bombRow) {
 						for (int r = bombRow; r > tile.getRow(); --r) {
-							if (tiles[r][tile.getCol()+1].isImpassable()) {
+							if (tiles[r][tile.getCol()].isImpassable()) {
 								return true;
 							}
 						}
 					} else if (tile.getRow() > bombRow) {
 						for (int r = bombRow; r <= tile.getRow(); r++) {
-							if (tiles[r][tile.getCol()+1].isImpassable()) {
+							if (tiles[r][tile.getCol()].isImpassable()) {
 								return true;
 							}
 						}
@@ -1098,13 +1098,13 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 					int bombCol = tileForPoint(bomb.getCenter()).getCol();
 					if (tile.getCol() < bombCol) {
 						for (int c = bombCol; c > tile.getCol(); --c) {
-							if (tiles[tile.getRow()+1][c].isImpassable()) {
+							if (tiles[tile.getRow()][c].isImpassable()) {
 								return true;
 							}
 						}
 					} else if (tile.getCol() > bombCol) {
 						for (int c = bombCol; c <= tile.getCol(); c++) {
-							if (tiles[tile.getRow()+1][c].isImpassable()) {
+							if (tiles[tile.getRow()][c].isImpassable()) {
 								return true;
 							}
 						}
