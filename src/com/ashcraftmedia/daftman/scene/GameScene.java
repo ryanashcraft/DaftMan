@@ -330,6 +330,13 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			case KeyEvent.VK_M: SoundStore.get().mute(); break;
 			case KeyEvent.VK_Q: SceneDirector.get().popToRootScene(); break;
 			case KeyEvent.VK_P: SceneDirector.get().pushScene(new PauseScene(SceneDirector.get().getContainer())); break;
+			case KeyEvent.VK_H:
+				if (!DaftMan.DEBUG) {
+					break;
+				}
+				bro.setHealth(10);
+				
+				break;
 			case KeyEvent.VK_D:
 				if (e.isShiftDown()) {
 					DaftMan.DEBUG = !DaftMan.DEBUG;
