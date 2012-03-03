@@ -568,7 +568,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		}
 		
 		Tile tileHeadedFor = tileHeadedFor(aFoe);
-		if (tileHeadedFor != null && !isTileSafe(tileHeadedFor(aFoe))) {
+		if (tileHeadedFor != null && !isTileSafe(tileHeadedFor)) {
 			return true;
 		}
 		
