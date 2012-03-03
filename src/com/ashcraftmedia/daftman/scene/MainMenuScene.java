@@ -136,12 +136,14 @@ public class MainMenuScene extends Scene {
 	 * @param e The KeyEvent object
 	 */
 	public void keyPressed(KeyEvent e) {
+		String[] level = null;
+		
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_ENTER:
 				SceneDirector.get().pushScene(new GameScene(SceneDirector.get().getContainer()));
 				break;
 			case KeyEvent.VK_O:
-				String[] level = LevelReader.readLevelFile();
+				level = LevelReader.readLevelFile();
 				SceneDirector.get().pushScene(new GameScene(SceneDirector.get().getContainer(), level));
 				break;
 			case KeyEvent.VK_H:
@@ -149,6 +151,23 @@ public class MainMenuScene extends Scene {
 				break;
 			case KeyEvent.VK_M:
 				SoundStore.get().mute();
+				break;
+			case KeyEvent.VK_B:
+				if (!DaftMan.DEBUG) {
+					break;
+				}
+				
+				level = new String[11];
+				for (int r = 0; r < level.length; r++) {
+					if (r == 0 || r == level.length - 1) {
+						level[r] = "rrrrrrrrrrrrrrr";
+					} else if (r == level.length / 2) {
+						level[r] = "rgggggg1ggggggr";
+					} else {
+						level[r] = "rgggggggggggggr";
+					}
+				}
+				SceneDirector.get().pushScene(new GameScene(SceneDirector.get().getContainer(), level));
 				break;
 			case KeyEvent.VK_D:
 				if (e.isShiftDown()) {

@@ -133,7 +133,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		tiles = new Tile[13][17];
 		for (int r = 0; r < tiles.length; r++) {
 			for (int c = 0; c < tiles[r].length; c++) {
-				if (r == 0 || r == tiles.length-1 || c == 0 || c == tiles[r].length-1 || (r % 2 == 0 && c % 2 == 0)) {
+				if (r == 0 || r == tiles.length-1 || c == 0 || c == tiles[r].length-1) {
 					tiles[r][c] = new Wall(r, c);
 				}
 				else {
@@ -161,6 +161,14 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	 */
 	public void randomlyFill() {
 		Random ranGen = new Random();
+		
+		for (int r = 0; r < tiles.length; r++) {
+			for (int c = 0; c < tiles[r].length; c++) {
+				if (r % 2 == 0 && c % 2 == 0) {
+					tiles[r][c] = new Wall(r, c);
+				}	
+			}
+		}
 		
 		int rupeesToAdd = Math.min(BASE_NUMBER_OF_RUPEES + (level-1)*ADD_NUMBER_OF_RUPEES_PER_LEVEL, MAX_NUMBER_OF_RUPEES);		
 		for (int i = 0; i < rupeesToAdd + NUMBER_OF_HEARTS + NUMBER_OF_STARS; i++) {
@@ -216,7 +224,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		for (int r = 0; r < tiles.length-1; r++) {			
 			for (int c = 0; c < tiles[r].length-1; c++) {
 				if (r == 0 || r == tiles.length-1 || c == 0 || c == tiles[r].length-1) {
-					tiles[r][c] = new Wall(r, c);
+//					tiles[r][c] = new Wall(r, c);
 				}
 				
 				else if (stringArray[r-1].charAt(c-1) == '1') {
@@ -230,7 +238,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 				}
 				
 				else if (stringArray[r-1].charAt(c-1) == 'w') {
-					tiles[r][c] = new Wall(r, c);
+//					tiles[r][c] = new Wall(r, c);
 				}
 				
 				else if (stringArray[r-1].charAt(c-1) == 'g') {
