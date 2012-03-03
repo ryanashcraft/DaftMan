@@ -86,8 +86,8 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	private Tile[][] tiles;
 	private ScoreBoard scoreBoard;
 	private final int SCOREBOARD_HEIGHT = 80;
-	private final int OFFSET_X = 16;
-	private final int OFFSET_Y = 32;
+	private final int OFFSET_X = -16;
+	private final int OFFSET_Y = 0;
 
 	private int timeLeft;
 	private int lastStepsLeft;
@@ -125,7 +125,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		score = DEFAULT_SCORE;
 		level = DEFAULT_LEVEL;
 		
-		scoreBoard = new ScoreBoard(new Point(-OFFSET_X, - SCOREBOARD_HEIGHT - OFFSET_Y), new Dimension(OFFSET_Y * 17 - OFFSET_X, SCOREBOARD_HEIGHT));
+		scoreBoard = new ScoreBoard(new Point(-OFFSET_X, - SCOREBOARD_HEIGHT - OFFSET_Y), new Dimension(container.getDimension().width + OFFSET_X, SCOREBOARD_HEIGHT));
 				
 		setBackground(Color.BLACK);
 		setSize(container.getDimension());
@@ -528,14 +528,11 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	 * @return The tile the point is in
 	 */
 	public Tile tileForPoint(Point aPoint) {
-		for (int r = 0; r < tiles.length-1; r++) {
-			for (int c = 0; c < tiles[r].length-1; c++) {
-				Tile aTile = tiles[r][c];
-				Rectangle tileRect = new Rectangle(aTile.getLoc().x, aTile.getLoc().y, aTile.getSize().width, aTile.getSize().height);
-				if (tileRect.contains(aPoint)) {
-					return tiles[r][c];
-				}
-			}
+		int row = aPoint.y / Tile.size.height;
+		int col = aPoint.x / Tile.size.width;
+		
+		if (row < tiles.length - 1 && col < tiles[row].length - 1) {
+			return tiles[row][col];
 		}
 		
 		return null;
@@ -571,13 +568,13 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		Tile currentTile = tileForPoint(sprite.getCenter());
 		switch (sprite.getDirection()) {
 			case UP:
-				return tiles[currentTile.getRow() + 1 - 1][currentTile.getCol() + 1];
+				return tiles[currentTile.getRow() - 1][currentTile.getCol()];
 			case RIGHT:
-				return tiles[currentTile.getRow() + 1][currentTile.getCol() + 1 + 1];
+				return tiles[currentTile.getRow()][currentTile.getCol() + 1];
 			case DOWN:
-				return tiles[currentTile.getRow() + 1 + 1][currentTile.getCol() + 1];
+				return tiles[currentTile.getRow() + 1][currentTile.getCol()];
 			case LEFT:
-				return tiles[currentTile.getRow() + 1][currentTile.getCol() + 1 - 1];
+				return tiles[currentTile.getRow()][currentTile.getCol() - 1];
 		}
 		
 		return null;
@@ -671,97 +668,97 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 		Tile tile = tileForPoint(bomb.getCenter()); 
 				
 		// up
-		for (int r = tile.getRow() + 1; r >= 0 && r >= tile.getRow() + 1 - MAX_BOMB_DISTANCE + 1; r--) {
-			if (tiles[r][tile.getCol() + 1].isDestructible()) {
-				if (tiles[r][tile.getCol() + 1].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[r][tile.getCol() + 1];
+		for (int r = tile.getRow(); r >= 0 && r >= tile.getRow() - MAX_BOMB_DISTANCE + 1; r--) {
+			if (tiles[r][tile.getCol()].isDestructible()) {
+				if (tiles[r][tile.getCol()].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[r][tile.getCol()];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[r][tile.getCol() + 1] = new Grass(r, tile.getCol() + 1);
+				tiles[r][tile.getCol()] = new Grass(r, tile.getCol());
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol()]).getLoc());
 				fires.add(aCloud);
 				
 				break;
-			} else if (tiles[r][tile.getCol() + 1].isImpassable()) {
+			} else if (tiles[r][tile.getCol()].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol()]).getLoc());
 				fires.add(aCloud);
 			}
 		}
 		
 		// down
-		for (int r = tile.getRow() + 1; r < tiles.length && r < tile.getRow() + 1 + MAX_BOMB_DISTANCE; r++) {
-			if (tiles[r][tile.getCol() + 1].isDestructible()) {
-				if (tiles[r][tile.getCol() + 1].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[r][tile.getCol() + 1];
+		for (int r = tile.getRow(); r < tiles.length && r < tile.getRow() + MAX_BOMB_DISTANCE; r++) {
+			if (tiles[r][tile.getCol()].isDestructible()) {
+				if (tiles[r][tile.getCol()].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[r][tile.getCol()];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[r][tile.getCol() + 1] = new Grass(r, tile.getCol() + 1);
+				tiles[r][tile.getCol()] = new Grass(r, tile.getCol());
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol()]).getLoc());
 				fires.add(aCloud);
 				
 				break;
-			} else if (tiles[r][tile.getCol() + 1].isImpassable()) {
+			} else if (tiles[r][tile.getCol()].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[r][tile.getCol() + 1]).getLoc());
+				aCloud.setLoc((tiles[r][tile.getCol()]).getLoc());
 				fires.add(aCloud);
 			}
 		}
 		
 		// left
-		for (int c = tile.getCol() + 1; c >= 0 && c >= tile.getCol() + 1 - MAX_BOMB_DISTANCE + 1; c--) {
-			if (tiles[tile.getRow() + 1][c].isDestructible()) {
-				if (tiles[tile.getRow() + 1][c].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[tile.getRow() + 1][c];
+		for (int c = tile.getCol(); c >= 0 && c >= tile.getCol() - MAX_BOMB_DISTANCE + 1; c--) {
+			if (tiles[tile.getRow()][c].isDestructible()) {
+				if (tiles[tile.getRow()][c].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[tile.getRow()][c];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[tile.getRow() + 1][c] = new Grass(tile.getRow() + 1, c);
+				tiles[tile.getRow()][c] = new Grass(tile.getRow(), c);
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow()][c]).getLoc());
 				fires.add(aCloud);
 				
 				break;
-			} else if (tiles[tile.getRow() + 1][c].isImpassable()) {
+			} else if (tiles[tile.getRow()][c].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow()][c]).getLoc());
 				fires.add(aCloud);
 			}
 		}
 		
 		// right
-		for (int c = tile.getCol() + 1; c < tiles[tile.getRow() + 1].length && c < tile.getCol() + 1 + MAX_BOMB_DISTANCE; c++) {
-			if (tiles[tile.getRow() + 1][c].isDestructible()) {
-				if (tiles[tile.getRow() + 1][c].getClass() == Brick.class) {
-					Brick aBrick = (Brick) tiles[tile.getRow() + 1][c];
+		for (int c = tile.getCol(); c < tiles[tile.getRow()].length && c < tile.getCol() + MAX_BOMB_DISTANCE; c++) {
+			if (tiles[tile.getRow()][c].isDestructible()) {
+				if (tiles[tile.getRow()][c].getClass() == Brick.class) {
+					Brick aBrick = (Brick) tiles[tile.getRow()][c];
 					placePrizeOnTile(aBrick.getPrize(), aBrick);
 				}
 				
-				tiles[tile.getRow() + 1][c] = new Grass(tile.getRow() + 1, c);
+				tiles[tile.getRow()][c] = new Grass(tile.getRow(), c);
 								
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow()][c]).getLoc());
 				fires.add(aCloud);
 
 				break;
-			} else if (tiles[tile.getRow() + 1][c].isImpassable()) {
+			} else if (tiles[tile.getRow()][c].isImpassable()) {
 				break;
 			} else {
 				Fire aCloud = new Fire(this);
-				aCloud.setLoc((tiles[tile.getRow() + 1][c]).getLoc());
+				aCloud.setLoc((tiles[tile.getRow()][c]).getLoc());
 				fires.add(aCloud);
 			}
 		}
@@ -1019,8 +1016,8 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	 * @return Whether an adjacent tile is passable
 	 */
 	public boolean adjacentTileMoveExists(Tile aTile) {
-		int tileRow = aTile.getRow() + 1;
-		int tileCol = aTile.getCol() + 1;
+		int tileRow = aTile.getRow();
+		int tileCol = aTile.getCol();
 		
 		// now check to make sure there is an alternative direction
 		for (int r = Math.max(0, tileRow-1); r <= Math.min(tiles.length-1, tileRow+1); r++) {
@@ -1039,8 +1036,8 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 	}
 
 	public Iterator<Tile> adjacentTiles(Tile aTile) {
-		int tileRow = aTile.getRow() + 1;
-		int tileCol = aTile.getCol() + 1;
+		int tileRow = aTile.getRow();
+		int tileCol = aTile.getCol();
 		
 		ArrayList<Tile> adjacentTiles = new ArrayList<Tile>();
 		
@@ -1079,7 +1076,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 			// in same column
 			if (tile.getCenter().x == bomb.getCenter().x) {
 				if (Math.abs(tile.getRow() - tileForPoint(bomb.getCenter()).getRow()) < MAX_BOMB_DISTANCE) {
-					int bombRow = tileForPoint(bomb.getCenter()).getRow() + 1;
+					int bombRow = tileForPoint(bomb.getCenter()).getRow();
 					if (tile.getRow() < bombRow) {
 						for (int r = bombRow; r > tile.getRow(); --r) {
 							if (tiles[r][tile.getCol()+1].isImpassable()) {
@@ -1098,7 +1095,7 @@ public class GameScene extends Scene implements MovingSpriteDelegate, BombDelega
 				}
 			} else if (tile.getCenter().y == bomb.getCenter().y) {
 				if (Math.abs(tile.getCol() - tileForPoint(bomb.getCenter()).getCol()) < MAX_BOMB_DISTANCE) {
-					int bombCol = tileForPoint(bomb.getCenter()).getCol() + 1;
+					int bombCol = tileForPoint(bomb.getCenter()).getCol();
 					if (tile.getCol() < bombCol) {
 						for (int c = bombCol; c > tile.getCol(); --c) {
 							if (tiles[tile.getRow()+1][c].isImpassable()) {

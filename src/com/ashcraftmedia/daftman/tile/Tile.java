@@ -17,8 +17,8 @@ public abstract class Tile {
 	 * @param aCol The col of the tile
 	 */
 	public Tile(int aRow, int aCol) {
-		row = aRow-1;
-		col = aCol-1;
+		row = aRow;
+		col = aCol;
 	}
 	
 	/**
