@@ -58,7 +58,11 @@ export default class SoundStore {
         if (this._midiInitPromise) {
             return this._midiInitPromise;
         }
-        this._midiInitPromise = this._doInitMidi();
+        this._midiInitPromise = this._doInitMidi().catch(e => {
+            // Clear cached promise so next call can retry
+            this._midiInitPromise = null;
+            throw e;
+        });
         return this._midiInitPromise;
     }
 

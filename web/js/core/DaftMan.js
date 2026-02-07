@@ -46,9 +46,8 @@ export default class DaftMan {
         // Initialize image store
         await ImageStore.get().initialize();
 
-        // Initialize sound store and pre-load MIDI subsystem
+        // Initialize sound store (MIDI pre-load deferred until after user gesture)
         const soundStore = SoundStore.get();
-        soundStore.startSequencer();
 
         // Show "Click to Play" screen and wait for user gesture to unlock audio
         ctx.fillStyle = '#000';
@@ -63,6 +62,9 @@ export default class DaftMan {
         await new Promise(resolve => {
             canvas.addEventListener('click', resolve, { once: true });
         });
+
+        // Pre-load MIDI subsystem now that we have a user gesture
+        soundStore.startSequencer();
 
         // Set up SceneDirector with canvas
         const director = SceneDirector.get();
