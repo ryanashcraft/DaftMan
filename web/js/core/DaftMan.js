@@ -32,6 +32,7 @@ export default class DaftMan {
 
     static async init() {
         const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
 
         // Load custom font
         try {
@@ -45,8 +46,23 @@ export default class DaftMan {
         // Initialize image store
         await ImageStore.get().initialize();
 
-        // Initialize sound store (constructor loads sound paths)
-        SoundStore.get();
+        // Initialize sound store and pre-load MIDI subsystem
+        const soundStore = SoundStore.get();
+        soundStore.startSequencer();
+
+        // Show "Click to Play" screen and wait for user gesture to unlock audio
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = '26px ArcadeClassic, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(DaftMan.addExtraSpaces('Click to Play'), canvas.width / 2, canvas.height / 2 - 16);
+        ctx.fillText(DaftMan.addExtraSpaces('Sound On'), canvas.width / 2, canvas.height / 2 + 16);
+
+        await new Promise(resolve => {
+            canvas.addEventListener('click', resolve, { once: true });
+        });
 
         // Set up SceneDirector with canvas
         const director = SceneDirector.get();

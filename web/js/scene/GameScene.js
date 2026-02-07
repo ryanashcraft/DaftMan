@@ -291,12 +291,13 @@ export default class GameScene extends Scene {
         }
     }
 
+    start() {
+        super.start();
+        SoundStore.get().playSound('DA_FUNK', -1, 120.0, false);
+    }
+
     update() {
         super.update();
-
-        if (this.getCycleCount() <= 1) {
-            SoundStore.get().playSound('DA_FUNK', -1, 120.0, false);
-        }
 
         if (this._bro !== null) {
             this._bro.act();
@@ -391,6 +392,8 @@ export default class GameScene extends Scene {
             this._bro.setDirection(SpriteDirection.STOP);
 
             this.randomlyFill();
+
+            SoundStore.get().playSound('DA_FUNK', -1, 120.0, false);
 
             this.update();
         }

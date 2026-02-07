@@ -18,15 +18,16 @@ export default class MainMenuScene extends Scene {
 
     start() {
         super.start();
+        SoundStore.get().playSound('AROUND_THE_WORLD', -1, 120.0, false);
+    }
+
+    resume(lastScene) {
+        super.resume(lastScene);
+        SoundStore.get().playSound('AROUND_THE_WORLD', -1, 120.0, false);
     }
 
     update() {
         super.update();
-
-        if (this.getCycleCount() <= 1) {
-            // MIDI playSound is a no-op in browser; original played "AROUND_THE_WORLD"
-            SoundStore.get().playSound('AROUND_THE_WORLD', -1, 120.0, false);
-        }
 
         this._setLogoColor(this.getCycleCount());
     }

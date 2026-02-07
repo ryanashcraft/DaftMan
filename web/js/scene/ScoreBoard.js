@@ -44,7 +44,7 @@ export default class ScoreBoard {
         const fontHeight = 26;
 
         ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
+        ctx.textBaseline = 'alphabetic';
 
         // Level centered at top
         ctx.fillText(

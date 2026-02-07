@@ -19,15 +19,11 @@ export default class EndScene extends Scene {
         this._name = '';
 
         SoundStore.get().startSequencer();
+        SoundStore.get().playSound('STRONGER', 0, 160.0, false);
     }
 
     update() {
         super.update();
-
-        if (this.getCycleCount() <= 1) {
-            // MIDI playSound is a no-op in browser; original played "STRONGER"
-            SoundStore.get().playSound('STRONGER', 0, 160.0, false);
-        }
 
         if (this._won && this.getCycleCount() % SceneDirector.get().secondsToCycles(10) === 0) {
             SceneDirector.get().popScene();
